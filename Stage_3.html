@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>ด่านที่ 3: กระจกเงาตีบท</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
+        body { font-family: 'Sarabun', sans-serif; text-align: center; background-color: #f4ecf7; color: #333; padding: 20px; }
+        .game-box { background-color: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
+        #canvas { border: 4px solid #8e44ad; border-radius: 10px; margin-top: 15px; background-color: #000; }
+        .btn { padding: 12px 25px; font-size: 18px; font-weight: bold; background-color: #8e44ad; color: white; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background-color: #732d91; }
+        #status-bar { margin-top: 20px; font-size: 24px; font-weight: bold; padding: 15px; border-radius: 8px; background-color: #f1c40f; color: #fff; }
+        .progress-bar { width: 100%; background-color: #e0e0e0; border-radius: 8px; margin-top: 15px; overflow: hidden; height: 25px; display: none; }
+        .progress-fill { height: 100%; background-color: #2ecc71; width: 0%; transition: width 0.1s; }
+    </style>
+</head>
+<body>
+    <div class="game-box">
+        <h2 style="color: #8e44ad;">ด่านที่ 3: กระจกเงาตีบท</h2>
+        <p>จงแสดง <b>"ท่าโกรธเกรี้ยว"</b> แบบผีเสื้อสมุทร ค้างไว้หน้ากล้องเพื่อปลดล็อกพลัง!</p>
+        
+        <button class="btn" type="button" onclick="init()" id="startBtn">เปิดกระจกเงา (กล้อง)</button>
+        
+        <div><canvas id="canvas" width="400" height="400"></canvas></div>
+        
+        <div class="progress-bar" id="progressContainer">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div id="status-bar">สถานะ: รอการเปิดกล้อง...</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
+    
+    <script type="text/javascript">
+        // 🛑 นำลิงก์จาก Teachable Machine มาใส่ตรงนี้ (ต้องมี / ปิดท้ายเสมอ)
+        const URL = "https://teachablemachine.withgoogle.com/models/URL_ของโมเดลที่คุณครูสอนไว้/";
+        
+        let model, webcam, ctx, maxPredictions;
+        let passTimer = 0; 
+        const requiredFrames = 60; // ต้องค้างท่าไว้ประมาณ 2 วินาที
+
+        async function init() {
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('status-bar').innerText = "กำลังโหลดระบบ AI...";
+            
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+
+            try {
+                model = await tmPose.load(modelURL, metadataURL);
+                maxPredictions = model.getTotalClasses();
+
+                const size = 400;
+                const flip = true; 
+                webcam = new tmPose.Webcam(size, size, flip); 
+                await webcam.setup(); 
+                await webcam.play();
+                window.requestAnimationFrame(loop);
+
+                const canvas = document.getElementById("canvas");
+                ctx = canvas.getContext("2d");
+                
+                document.getElementById('progressContainer').style.display = 'block';
+                document.getElementById('status-bar').innerText = "พร้อมแล้ว! กรุณาร่ายรำท่าโกรธ";
+                document.getElementById('status-bar').style.backgroundColor = "#e67e22";
+            } catch (e) {
+                alert("เกิดข้อผิดพลาดในการโหลดโมเดล โปรดตรวจสอบลิงก์ URL");
+            }
+        }
+
+        async function loop(timestamp) {
+            webcam.update(); 
+            await predict(); 
+            window.requestAnimationFrame(loop);
+        }
+
+        async function predict() {
+            const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+            const prediction = await model.predict(posenetOutput);
+
+            let isDoingCorrectPose = false;
+
+            // ตรวจหา Class ที่ชื่อว่า "Angry" (ถ้าคุณครูตั้งชื่ออื่น ต้องแก้ให้ตรงกัน)
+            for (let i = 0; i < maxPredictions; i++) {
+                if (prediction[i].className === "Angry" && prediction[i].probability > 0.85) {
+                    isDoingCorrectPose = true;
+                }
+            }
+
+            const statusDiv = document.getElementById("status-bar");
+            const progressFill = document.getElementById("progressFill");
+
+            if (isDoingCorrectPose) {
+                if (passTimer < requiredFrames) passTimer++;
+                
+                let percent = (passTimer / requiredFrames) * 100;
+                progressFill.style.width = percent + "%";
+
+                if (passTimer >= requiredFrames) {
+                    statusDiv.innerHTML = "🎉 ผ่านด่าน! คุณสะกดพลังสำเร็จ!";
+                    statusDiv.style.backgroundColor = "#27ae60";
+                } else {
+                    statusDiv.innerHTML = "ค้างไว้... พลังกำลังทำงาน!";
+                    statusDiv.style.backgroundColor = "#d35400";
+                }
+            } else {
+                if (passTimer < requiredFrames) { // ถ้าระดับยังไม่เต็มแล้วหลุดท่า ให้รีเซ็ต
+                    passTimer = 0; 
+                    progressFill.style.width = "0%";
+                    statusDiv.innerHTML = "สถานะ: ไม่พบท่าทางที่ถูกต้อง";
+                    statusDiv.style.backgroundColor = "#c0392b";
+                }
+            }
+
+            drawPose(pose);
+        }
+
+        function drawPose(pose) {
+            if (webcam.canvas) {
+                ctx.drawImage(webcam.canvas, 0, 0);
+                if (pose) {
+                    const minPartConfidence = 0.5;
+                    tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
+                    tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

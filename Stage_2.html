@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>ด่านที่ 2: สร้างปี่วิเศษ</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
+        body { font-family: 'Sarabun', sans-serif; text-align: center; background-color: #1a252f; color: #ecf0f1; padding: 20px; }
+        .game-box { background-color: #2c3e50; padding: 30px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); max-width: 600px; margin: auto; }
+        .flute-container { margin: 30px 0; padding: 20px; background-color: #34495e; border-radius: 10px; }
+        input[type=range] { width: 80%; cursor: pointer; }
+        .btn { padding: 12px 25px; font-size: 18px; font-weight: bold; background-color: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background-color: #2980b9; }
+        .status-box { margin-top: 20px; padding: 15px; border-radius: 8px; font-size: 20px; font-weight: bold; background-color: #c0392b; }
+        #lengthValue { color: #f1c40f; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="game-box">
+        <h2>ด่านที่ 2: สร้างปี่วิเศษสะกดทัพ</h2>
+        <p>หลักวิทยาศาสตร์: ปี่ที่ <b>ยาวขึ้น</b> จะทำให้สั่นช้าลง และได้ <b>เสียงทุ้ม (ต่ำ)</b></p>
+        <p>จงปรับความยาวปี่ให้เกิดเสียงทุ้มต่ำ เพื่อกล่อมผีเสื้อสมุทรให้หลับ!</p>
+
+        <div class="flute-container">
+            <label for="pipeLength" style="font-size: 18px;">ความยาวของปี่: </label><br><br>
+            <input type="range" id="pipeLength" min="10" max="100" value="10">
+            <p>สถานะปี่ตอนนี้: <span id="lengthValue">สั้นมาก (เสียงแหลมสูง)</span></p>
+            <button class="btn" onclick="playSound()">🎵 ทดลองเป่าปี่</button>
+        </div>
+
+        <div class="status-box" id="feedback">สถานะ: ผีเสื้อสมุทรกำลังตื่นตัวและโกรธ!</div>
+    </div>
+
+    <script>
+        let audioCtx;
+
+        document.getElementById('pipeLength').addEventListener('input', function() {
+            let length = this.value;
+            let display = "ปานกลาง";
+            if (length < 40) display = "สั้นมาก (เสียงแหลมสูง)";
+            else if (length > 80) display = "ยาวมาก (เสียงทุ้มต่ำ)";
+            document.getElementById('lengthValue').innerText = display;
+        });
+
+        function playSound() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+            let oscillator = audioCtx.createOscillator();
+            let pipeLength = document.getElementById('pipeLength').value;
+            let feedback = document.getElementById('feedback');
+
+            // สูตรจำลอง: ยาวมาก = ความถี่ต่ำ, สั้นมาก = ความถี่สูง
+            let frequency = 1000 - (pipeLength * 8); 
+            
+            oscillator.type = 'triangle'; // คลื่นเสียงคล้ายเครื่องเป่า
+            oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime); 
+            oscillator.connect(audioCtx.destination);
+            
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 1.5); 
+
+            if (frequency <= 300) {
+                feedback.innerHTML = "💤 ยอดเยี่ยม! เสียงทุ้มต่ำทำลายโสตประสาท ผีเสื้อสมุทรหลับไหลแล้ว!";
+                feedback.style.backgroundColor = "#27ae60";
+            } else {
+                feedback.innerHTML = "😡 เสียงแหลมเกินไป! ผีเสื้อสมุทรปวดหูและตื่นขึ้นมา!";
+                feedback.style.backgroundColor = "#c0392b";
+            }
+        }
+    </script>
+</body>
+</html>

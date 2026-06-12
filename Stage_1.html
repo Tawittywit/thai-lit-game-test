@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>ด่านที่ 1: ถอดรหัสคำศัพท์</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
+        body { font-family: 'Sarabun', sans-serif; text-align: center; background-color: #2c3e50; color: #ecf0f1; padding: 20px; }
+        .game-box { background-color: #34495e; padding: 30px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); max-width: 600px; margin: auto; }
+        .word { display: inline-block; padding: 10px 20px; margin: 10px; background-color: #e67e22; color: white; border-radius: 8px; cursor: grab; font-weight: bold; font-size: 18px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .word:active { cursor: grabbing; }
+        .drop-container { display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
+        .drop-row { display: flex; align-items: center; justify-content: space-between; width: 250px; margin: 10px 0; font-size: 20px; font-weight: bold; }
+        .dropzone { width: 120px; height: 50px; border: 2px dashed #bdc3c7; background-color: #2c3e50; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        #result { margin-top: 25px; font-size: 22px; font-weight: bold; color: #2ecc71; min-height: 30px; }
+    </style>
+</head>
+<body>
+    <div class="game-box">
+        <h2>ด่านที่ 1: ถอดรหัสคำศัพท์หนีผีเสื้อสมุทร</h2>
+        <p>จงลากคำศัพท์สีส้ม ไปวางในช่องว่างให้ตรงกับความหมายเพื่อเปิดประตูถ้ำ!</p>
+        
+        <div id="words-container">
+            <div class="word" draggable="true" id="word1" ondragstart="drag(event)">มัจฉา</div>
+            <div class="word" draggable="true" id="word2" ondragstart="drag(event)">ชลมารค</div>
+            <div class="word" draggable="true" id="word3" ondragstart="drag(event)">กุมภา</div>
+        </div>
+
+        <div class="drop-container">
+            <div class="drop-row">ปลา <div class="dropzone" id="drop1" ondrop="drop(event, 'word1')" ondragover="allowDrop(event)"></div></div>
+            <div class="drop-row">ทางน้ำ <div class="dropzone" id="drop2" ondrop="drop(event, 'word2')" ondragover="allowDrop(event)"></div></div>
+            <div class="drop-row">จระเข้ <div class="dropzone" id="drop3" ondrop="drop(event, 'word3')" ondragover="allowDrop(event)"></div></div>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let score = 0;
+
+        function allowDrop(ev) { ev.preventDefault(); }
+        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+
+        function drop(ev, correctId) {
+            ev.preventDefault();
+            let data = ev.dataTransfer.getData("text");
+            
+            if (data === correctId) {
+                let draggedElement = document.getElementById(data);
+                ev.target.appendChild(draggedElement);
+                ev.target.style.border = "2px solid #2ecc71";
+                ev.target.style.backgroundColor = "#27ae60";
+                draggedElement.draggable = false; // ป้องกันการลากซ้ำ
+                draggedElement.style.margin = "0";
+                score++;
+                
+                if (score === 3) {
+                    document.getElementById("result").innerHTML = "🎉 ตอบถูกต้อง! ประตูถ้ำเปิดออกแล้ว! (กลับไปเดินที่แผนที่ได้เลย)";
+                }
+            } else {
+                alert("ยังไม่ถูกต้อง ลองคิดความหมายดูดีๆ นะ!");
+            }
+        }
+    </script>
+</body>
+</html>
