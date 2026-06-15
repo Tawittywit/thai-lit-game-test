@@ -7,11 +7,19 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
         body { font-family: 'Sarabun', sans-serif; text-align: center; background-color: #f4ecf7; color: #333; padding: 20px; }
-        .game-box { background-color: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
-        #canvas { border: 4px solid #8e44ad; border-radius: 10px; margin-top: 15px; background-color: #000; }
-        .btn { padding: 12px 25px; font-size: 18px; font-weight: bold; background-color: #8e44ad; color: white; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .game-box { background-color: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 700px; margin: auto; }
+        #canvas { border: 4px solid #8e44ad; border-radius: 10px; margin-top: 15px; background-color: #000; width: 100%; max-width: 400px;}
+        .btn { padding: 12px 25px; font-size: 18px; font-weight: bold; background-color: #8e44ad; color: white; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-bottom: 15px;}
         .btn:hover { background-color: #732d91; }
-        #status-bar { margin-top: 20px; font-size: 24px; font-weight: bold; padding: 15px; border-radius: 8px; background-color: #f1c40f; color: #fff; }
+        
+        /* สไตล์สำหรับกล่องภารกิจ */
+        .mission-box { background-color: #fdf2e9; padding: 15px; border-radius: 10px; margin-top: 15px; text-align: left; border: 2px solid #e67e22; }
+        .mission-title { font-size: 20px; font-weight: bold; color: #d35400; margin-bottom: 10px; text-align: center;}
+        .mission-list { list-style-type: none; padding: 0; font-size: 18px; line-height: 1.8; }
+        .mission-list li { padding: 5px 10px; border-radius: 5px; }
+        .active-mission { background-color: #fdebd0; font-weight: bold; border-left: 5px solid #e67e22; }
+
+        #status-bar { margin-top: 20px; font-size: 22px; font-weight: bold; padding: 15px; border-radius: 8px; background-color: #f1c40f; color: #fff; }
         .progress-bar { width: 100%; background-color: #e0e0e0; border-radius: 8px; margin-top: 15px; overflow: hidden; height: 25px; display: none; }
         .progress-fill { height: 100%; background-color: #2ecc71; width: 0%; transition: width 0.1s; }
     </style>
@@ -19,11 +27,24 @@
 <body>
     <div class="game-box">
         <h2 style="color: #8e44ad;">ด่านที่ 3: กระจกเงาตีบท</h2>
-        <p>จงแสดง <b>"ท่าโกรธเกรี้ยว"</b> แบบผีเสื้อสมุทร ค้างไว้หน้ากล้องเพื่อปลดล็อกพลัง!</p>
+        <p>จงแสดงภาษาท่าทางให้ถูกต้องตามลำดับ ค้างไว้จนหลอดพลังเต็ม เพื่อปลดล็อกพลัง!</p>
         
         <button class="btn" type="button" onclick="init()" id="startBtn">เปิดกระจกเงา (กล้อง)</button>
         
-        <div><canvas id="canvas" width="400" height="400"></canvas></div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+            <div><canvas id="canvas" width="400" height="400"></canvas></div>
+            
+            <div class="mission-box">
+                <div class="mission-title">📜 ภารกิจร่ายรำ</div>
+                <ul class="mission-list" id="mission-list">
+                    <li id="mission-0">⬜ ท่าตัวเรา</li>
+                    <li id="mission-1">⬜ ท่ารัก</li>
+                    <li id="mission-2">⬜ ท่าร้องไห้</li>
+                    <li id="mission-3">⬜ ท่าโกรธ</li>
+                    <li id="mission-4">⬜ ท่าปฏิเสธ</li>
+                </ul>
+            </div>
+        </div>
         
         <div class="progress-bar" id="progressContainer">
             <div class="progress-fill" id="progressFill"></div>
@@ -36,16 +57,27 @@
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
     
     <script type="text/javascript">
-        // 🛑 นำลิงก์จาก Teachable Machine มาใส่ตรงนี้ (ต้องมี / ปิดท้ายเสมอ)
+        // ลิงก์โมเดลของคุณครู
         const URL = "https://teachablemachine.withgoogle.com/models/P7HjTTs8j/";
         
+        // ลำดับท่าทางที่ต้องการให้ทำ (ชื่อต้องตรงกับที่สอน AI เป๊ะๆ)
+        const targetPoses = [
+            "Class 1",
+            "Class 2",
+            "Class 3",
+            "Class 4",
+            "Class 5"
+        ];
+        
+        let currentPoseIndex = 0; // ตัวแปรเก็บว่าถึงท่าที่เท่าไหร่แล้ว
         let model, webcam, ctx, maxPredictions;
         let passTimer = 0; 
-        const requiredFrames = 60; // ต้องค้างท่าไว้ประมาณ 2 วินาที
+        const requiredFrames = 45; // ระยะเวลาค้างท่า (ประมาณ 1.5 - 2 วินาที)
 
         async function init() {
             document.getElementById('startBtn').style.display = 'none';
             document.getElementById('status-bar').innerText = "กำลังโหลดระบบ AI...";
+            document.getElementById('status-bar').style.backgroundColor = "#f39c12";
             
             const modelURL = URL + "model.json";
             const metadataURL = URL + "metadata.json";
@@ -65,10 +97,10 @@
                 ctx = canvas.getContext("2d");
                 
                 document.getElementById('progressContainer').style.display = 'block';
-                document.getElementById('status-bar').innerText = "พร้อมแล้ว! กรุณาร่ายรำท่าโกรธ";
-                document.getElementById('status-bar').style.backgroundColor = "#e67e22";
+                updateMissionUI(); // ไฮไลท์ท่าแรกที่ต้องทำ
+                
             } catch (e) {
-                alert("เกิดข้อผิดพลาดในการโหลดโมเดล โปรดตรวจสอบลิงก์ URL");
+                alert("เกิดข้อผิดพลาดในการโหลดโมเดล โปรดตรวจสอบลิงก์ URL หรืออินเทอร์เน็ต");
             }
         }
 
@@ -82,11 +114,19 @@
             const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
             const prediction = await model.predict(posenetOutput);
 
-            let isDoingCorrectPose = false;
+            // ถ้ารำครบทุกท่าแล้ว ให้หยุดการเช็ค
+            if (currentPoseIndex >= targetPoses.length) {
+                drawPose(pose);
+                return; 
+            }
 
-            // ตรวจหา Class ที่ชื่อว่า "Angry" (ถ้าคุณครูตั้งชื่ออื่น ต้องแก้ให้ตรงกัน)
+            let isDoingCorrectPose = false;
+            let currentTargetClass = targetPoses[currentPoseIndex];
+
+            // วนลูปตรวจหาว่ากำลังทำท่าที่เป็น "เป้าหมายปัจจุบัน" อยู่หรือไม่
             for (let i = 0; i < maxPredictions; i++) {
-                if (prediction[i].className === "Angry" && prediction[i].probability > 0.85) {
+                // เช็คความแม่นยำต้องเกิน 80% ขึ้นไป
+                if (prediction[i].className === currentTargetClass && prediction[i].probability > 0.80) {
                     isDoingCorrectPose = true;
                 }
             }
@@ -95,28 +135,56 @@
             const progressFill = document.getElementById("progressFill");
 
             if (isDoingCorrectPose) {
-                if (passTimer < requiredFrames) passTimer++;
+                passTimer++;
                 
                 let percent = (passTimer / requiredFrames) * 100;
                 progressFill.style.width = percent + "%";
+                statusDiv.innerHTML = "พลังกำลังเชื่อมต่อ... ค้างท่าไว้!";
+                statusDiv.style.backgroundColor = "#e67e22";
 
+                // เมื่อทำค้างไว้จนครบเวลาที่กำหนด
                 if (passTimer >= requiredFrames) {
-                    statusDiv.innerHTML = "🎉 ผ่านด่าน! คุณสะกดพลังสำเร็จ!";
-                    statusDiv.style.backgroundColor = "#27ae60";
-                } else {
-                    statusDiv.innerHTML = "ค้างไว้... พลังกำลังทำงาน!";
-                    statusDiv.style.backgroundColor = "#d35400";
+                    // เปลี่ยนสถานะในรายการเป็นทำสำเร็จ ✅
+                    document.getElementById("mission-" + currentPoseIndex).innerHTML = "✅ " + currentTargetClass;
+                    document.getElementById("mission-" + currentPoseIndex).classList.remove("active-mission");
+                    
+                    // ขยับไปท่าต่อไป
+                    currentPoseIndex++;
+                    passTimer = 0; // รีเซ็ตหลอดพลัง
+                    progressFill.style.width = "0%";
+
+                    if (currentPoseIndex < targetPoses.length) {
+                        updateMissionUI(); // อัปเดต UI ให้ไฮไลท์ท่าต่อไป
+                    } else {
+                        // ครบทุกท่าแล้ว
+                        statusDiv.innerHTML = "🎉 สำเร็จ! คุณปลดล็อกพลังร่ายรำครบทุกท่าแล้ว (ผ่านด่าน)";
+                        statusDiv.style.backgroundColor = "#27ae60";
+                        progressFill.style.width = "100%";
+                    }
                 }
             } else {
-                if (passTimer < requiredFrames) { // ถ้าระดับยังไม่เต็มแล้วหลุดท่า ให้รีเซ็ต
+                // หากหลุดท่า หรือกล้องจับเจอ "BG พื้นหลัง" หลอดพลังจะลดลง/รีเซ็ต
+                if (passTimer > 0) {
                     passTimer = 0; 
                     progressFill.style.width = "0%";
-                    statusDiv.innerHTML = "สถานะ: ไม่พบท่าทางที่ถูกต้อง";
+                    statusDiv.innerHTML = "กำลังรอท่า: " + currentTargetClass;
                     statusDiv.style.backgroundColor = "#c0392b";
                 }
             }
 
             drawPose(pose);
+        }
+
+        function updateMissionUI() {
+            if(currentPoseIndex < targetPoses.length) {
+                let currentMissionId = "mission-" + currentPoseIndex;
+                document.getElementById(currentMissionId).classList.add("active-mission");
+                
+                // ตัดคำว่า "Class X " ออกเพื่อแสดงผลให้ดูดีขึ้น
+                let displayName = targetPoses[currentPoseIndex].replace(/Class \d+ /, "");
+                document.getElementById('status-bar').innerText = "กำลังรอท่า: " + displayName;
+                document.getElementById('status-bar').style.backgroundColor = "#3498db";
+            }
         }
 
         function drawPose(pose) {
