@@ -32,16 +32,17 @@
         <button class="btn" type="button" onclick="init()" id="startBtn">เปิดกระจกเงา (กล้อง)</button>
         
         <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
-            <div><canvas id="canvas" width="400" height="400"></canvas></div>
+            <div><canvas id="canvas" width="500" height="500"></canvas></div>
             
             <div class="mission-box">
                 <div class="mission-title">📜 ภารกิจร่ายรำ</div>
                 <ul class="mission-list" id="mission-list">
-                    <li id="mission-0">⬜ ท่าตัวเรา</li>
-                    <li id="mission-1">⬜ ท่ารัก</li>
-                    <li id="mission-2">⬜ ท่าร้องไห้</li>
-                    <li id="mission-3">⬜ ท่าโกรธ</li>
-                    <li id="mission-4">⬜ ท่าปฏิเสธ</li>
+                    <li id="mission-0">⬜ ท่ารัก</li>
+                    <li id="mission-1">⬜ ท่าโกรธ</li>
+                    <li id="mission-2">⬜ ท่าตัวเรา</li>
+                    <li id="mission-3">⬜ ท่าร้องไห้</li>
+                    <li id="mission-4">⬜ ท่ายิ้ม</li>
+                    <li id="mission-5">⬜ ท่าปฏิเสธ</li>
                 </ul>
             </div>
         </div>
@@ -58,21 +59,22 @@
     
     <script type="text/javascript">
         // ลิงก์โมเดลของคุณครู
-        const URL = "https://teachablemachine.withgoogle.com/models/P7HjTTs8j/";
+        const URL = "https://teachablemachine.withgoogle.com/models/1jrJKozUn/";
         
         // ลำดับท่าทางที่ต้องการให้ทำ (ชื่อต้องตรงกับที่สอน AI เป๊ะๆ)
         const targetPoses = [
-            "Class 1",
-            "Class 2",
-            "Class 3",
-            "Class 4",
-            "Class 5"
+            "ท่ารัก",
+            "ท่าโกรธ",
+            "ท่าตัวเรา",
+            "ท่าร้องไห้",
+            "ท่ายิ้ม"
+            "ท่าปฏิเสธ"
         ];
         
         let currentPoseIndex = 0; // ตัวแปรเก็บว่าถึงท่าที่เท่าไหร่แล้ว
         let model, webcam, ctx, maxPredictions;
         let passTimer = 0; 
-        const requiredFrames = 45; // ระยะเวลาค้างท่า (ประมาณ 1.5 - 2 วินาที)
+        const requiredFrames = 35; // ระยะเวลาค้างท่า (ประมาณ 1.5 - 2 วินาที)
 
         async function init() {
             document.getElementById('startBtn').style.display = 'none';
@@ -86,7 +88,7 @@
                 model = await tmPose.load(modelURL, metadataURL);
                 maxPredictions = model.getTotalClasses();
 
-                const size = 400;
+                const size = 500;
                 const flip = true; 
                 webcam = new tmPose.Webcam(size, size, flip); 
                 await webcam.setup(); 
