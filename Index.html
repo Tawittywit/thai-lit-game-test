@@ -28,6 +28,30 @@
 </head>
 <body class="min-h-screen text-slate-100 flex flex-col justify-between overflow-x-hidden selection:bg-emerald-500 selection:text-slate-950">
 
+    <section id="player-name-gate" class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur flex items-center justify-center p-4">
+        <div class="w-full max-w-md bg-slate-900 border border-emerald-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-5">
+            <div class="text-center space-y-2">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-500 text-slate-950 text-3xl shadow-lg shadow-emerald-500/20">
+                    <i class="fa-solid fa-dungeon"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-emerald-300">ลงนามก่อนเข้าสู่เขาวงกต</h2>
+                <p class="text-xs text-slate-400 leading-relaxed">ชื่อนี้จะใช้แสดงบนแผนที่หลักและใบประกาศเมื่อผ่านครบทุกด่าน</p>
+            </div>
+
+            <div class="space-y-2">
+                <label for="gate-player-name-input" class="block text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    <i class="fa-solid fa-user-graduate mr-1"></i> ชื่อผู้เล่น
+                </label>
+                <input type="text" id="gate-player-name-input" placeholder="พิมพ์ชื่อของคุณ..." class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-700 text-slate-100 focus:outline-none focus:border-emerald-500 transition">
+                <p id="gate-player-name-error" class="hidden text-xs text-rose-300">กรุณากรอกชื่อก่อนเข้าสู่หน้าหลัก</p>
+            </div>
+
+            <button onclick="enterMainMap()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-extrabold transition shadow-lg shadow-emerald-500/20">
+                <i class="fa-solid fa-door-open mr-1"></i> เข้าสู่หน้าหลัก
+            </button>
+        </div>
+    </section>
+
     <header class="relative z-10 w-full bg-slate-950/80 backdrop-blur border-b border-emerald-500/30 px-4 py-3 sm:px-6">
         <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
             <div class="flex items-center gap-3">
@@ -85,6 +109,9 @@
             <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-2">
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fa-solid fa-user-graduate mr-1"></i> นามนักเรียนผู้ผจญภัย:</label>
                 <input type="text" id="player-name-input" value="กวีน้อยสยบวารี" oninput="updatePlayerName()" class="w-full px-3 py-2 text-sm rounded-xl bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-emerald-500 transition">
+                <button onclick="openPlayerNameGate()" class="w-full text-3xs text-emerald-300 hover:text-emerald-200 border border-emerald-500/20 hover:border-emerald-400/50 rounded-lg py-1.5 transition">
+                    <i class="fa-solid fa-pen-to-square mr-1"></i> เปลี่ยนชื่อผู้เล่น
+                </button>
             </div>
 
             <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 space-y-3">
@@ -147,6 +174,7 @@
         const ctx = canvas.getContext('2d');
 
         const TILE_SIZE = 30;
+        let hasEnteredPlayerName = false;
         let progressState = {
             stage1_cleared: false,
             stage2_cleared: false,
@@ -173,6 +201,52 @@
         ];
 
         let player = { x: 45, y: 225 }; 
+
+        function applyPlayerName(name) {
+            const cleanName = name.trim() || "นักเรียนกวีน้อย";
+            document.getElementById('display-player-name').textContent = cleanName;
+            document.getElementById('player-name-input').value = cleanName;
+            document.getElementById('gate-player-name-input').value = cleanName;
+            localStorage.setItem('player_name', cleanName);
+        }
+
+        function enterMainMap() {
+            const input = document.getElementById('gate-player-name-input');
+            const error = document.getElementById('gate-player-name-error');
+            const name = input.value.trim();
+            if (!name) {
+                error.classList.remove('hidden');
+                input.focus();
+                return;
+            }
+
+            error.classList.add('hidden');
+            applyPlayerName(name);
+            hasEnteredPlayerName = true;
+            document.getElementById('player-name-gate').classList.add('hidden');
+        }
+
+        function openPlayerNameGate() {
+            const gate = document.getElementById('player-name-gate');
+            const input = document.getElementById('gate-player-name-input');
+            input.value = document.getElementById('player-name-input').value.trim();
+            document.getElementById('gate-player-name-error').classList.add('hidden');
+            gate.classList.remove('hidden');
+            setTimeout(() => input.focus(), 50);
+        }
+
+        function initializePlayerNameGate() {
+            const savedName = localStorage.getItem('player_name') || "";
+            if (savedName.trim()) {
+                applyPlayerName(savedName);
+                hasEnteredPlayerName = true;
+                document.getElementById('player-name-gate').classList.add('hidden');
+            } else {
+                hasEnteredPlayerName = false;
+                document.getElementById('player-name-gate').classList.remove('hidden');
+                setTimeout(() => document.getElementById('gate-player-name-input').focus(), 50);
+            }
+        }
         
         const portals = [
             { id: 1, name: "ค่ายกลกลอนอสุรี", gridX: 3, gridY: 3, emoji: "👹", unlocked: true, color: "#10b981", file: "Stage_1.html" },
@@ -318,6 +392,8 @@
         }
 
         function movePlayer(direction) {
+            if (!hasEnteredPlayerName) return;
+
             let nextX = player.x;
             let nextY = player.y;
             const step = 15; 
@@ -379,7 +455,7 @@
 
         function updatePlayerName() {
             const val = document.getElementById('player-name-input').value.trim();
-            document.getElementById('display-player-name').textContent = val || "นักเรียนกวีน้อย";
+            applyPlayerName(val || "นักเรียนกวีน้อย");
         }
 
 		function resetAllProgress() {
@@ -444,6 +520,7 @@
         });
 
         window.onload = function() {
+            initializePlayerNameGate();
             loadSavedProgress();
             drawMaze();
         };
@@ -451,6 +528,12 @@
 
 		// เรียกใช้งานทุกครั้งเมื่อหน้าหลักถูกโหลดขึ้นมา
 		window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('gate-player-name-input').addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    enterMainMap();
+                }
+            });
 			checkStageProgress();
 		});
     </script>
