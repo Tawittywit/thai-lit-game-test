@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>หน้าหลักผจญภัย: เขาวงกตถ้ำแก้วพิสดารพระอภัยมณี</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -89,7 +90,7 @@
             </div>
 
             <div class="relative rounded-2xl overflow-hidden border-4 border-slate-800 bg-slate-950">
-                <canvas id="map-canvas" width="600" height="450" class="w-full max-w-[600px] aspect-[4/3] block"></canvas>
+                <canvas id="map-canvas" width="600" height="600" class="w-full max-w-[600px] aspect-square block"></canvas>
                 
                 <div class="absolute bottom-4 right-4 grid grid-cols-3 gap-1 w-28 h-28 opacity-75 hover:opacity-100 transition sm:hidden">
                     <div></div>
@@ -181,26 +182,33 @@
             stage3_cleared: false
         };
 
-        // Maze Definition (1=Wall, 0=Path)
-        const mazeGrid = [
+        // Maze Definition (1=Wall, 0=Path) - 20x20 grid
+        const baseMazeGrid = [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-            [1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1],
-            [1,0,1,1,1,0,1,0,1,1,1,1,0,1,0,1,1,1,0,1],
-            [1,0,1,0,0,0,0,0,1,0,0,1,0,0,0,1,0,1,0,1], 
-            [1,0,1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,0,1],
-            [1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
-            [1,1,1,0,1,0,1,1,1,1,1,1,1,1,0,1,0,1,1,1],
-            [1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1], 
-            [1,0,1,1,1,1,1,0,1,1,1,1,0,1,1,1,1,1,0,1],
-            [1,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1],
-            [1,0,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,0,1],
-            [1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1],
-            [1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1],
-            [1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+            [1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1],
+            [1,0,1,0,1,0,1,1,1,0,1,0,1,1,1,0,1,0,1,1],
+            [1,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1],
+            [1,0,1,1,1,1,1,0,1,1,1,0,1,0,1,1,1,1,0,1],
+            [1,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,1],
+            [1,1,1,1,1,0,1,1,1,0,1,1,1,0,1,0,1,1,0,1],
+            [1,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1],
+            [1,0,1,0,1,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1],
+            [1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,1],
+            [1,0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,0,1,0,1],
+            [1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,1],
+            [1,1,1,1,1,0,1,0,1,0,1,1,1,1,0,1,1,1,0,1],
+            [1,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,1,0,1],
+            [1,0,1,0,1,1,1,1,1,1,1,1,0,1,1,1,0,1,0,1],
+            [1,0,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1],
+            [1,0,1,1,1,1,1,1,1,1,0,1,1,1,0,1,1,1,0,1],
+            [1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1],
+            [1,1,1,1,1,1,1,1,0,0,0,1,0,0,0,1,1,1,0,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
         ];
 
-        let player = { x: 45, y: 225 }; 
+        let mazeGrid = baseMazeGrid;
+        let currentMazeIndex = 0;
+        let player = { x: 45, y: 45 }; 
 
         function applyPlayerName(name) {
             const cleanName = name.trim() || "นักเรียนกวีน้อย";
@@ -253,6 +261,169 @@
             { id: 2, name: "ปี่แก้วสะท้านสมุทร", gridX: 16, gridY: 3, emoji: "🦈", unlocked: false, color: "#f59e0b", file: "Stage_2.html" },
             { id: 3, name: "นาฏเงาแก้วพิสดาร", gridX: 10, gridY: 11, emoji: "💃", unlocked: false, color: "#ec4899", file: "Stage_3.html" }
         ];
+
+        function cloneMaze(grid) {
+            return grid.map(row => [...row]);
+        }
+
+        function flipHorizontal(grid) {
+            return grid.map(row => [...row].reverse());
+        }
+
+        function flipVertical(grid) {
+            return [...grid].reverse().map(row => [...row]);
+        }
+
+        function rotateMaze180(grid) {
+            return flipVertical(flipHorizontal(grid));
+        }
+
+        function carveMazeVariant(grid) {
+            const variant = cloneMaze(grid);
+            [
+                [2,4], [2,10], [4,6], [6,11], [8,6], [10,8], [12,10], [14,4], [16,12], [18,11]
+            ].forEach(([row, col]) => {
+                if (variant[row] && variant[row][col] !== undefined) variant[row][col] = 0;
+            });
+            return variant;
+        }
+
+        const mazeLayouts = [
+            baseMazeGrid,
+            flipHorizontal(baseMazeGrid),
+            flipVertical(baseMazeGrid),
+            rotateMaze180(baseMazeGrid),
+            carveMazeVariant(baseMazeGrid)
+        ];
+
+        function getStartCell() {
+            for (let row = 1; row < mazeGrid.length - 1; row++) {
+                for (let col = 1; col < mazeGrid[row].length - 1; col++) {
+                    if (mazeGrid[row][col] === 0) return { gridX: col, gridY: row };
+                }
+            }
+            return { gridX: 1, gridY: 1 };
+        }
+
+        function cellToPlayerPosition(cell) {
+            return {
+                x: cell.gridX * TILE_SIZE + TILE_SIZE / 2,
+                y: cell.gridY * TILE_SIZE + TILE_SIZE / 2
+            };
+        }
+
+        function getReachablePathCells(startCell) {
+            const queue = [startCell];
+            const visited = new Set([`${startCell.gridY},${startCell.gridX}`]);
+            const reachable = [];
+            const directions = [[1,0], [-1,0], [0,1], [0,-1]];
+
+            while (queue.length) {
+                const cell = queue.shift();
+                reachable.push(cell);
+
+                directions.forEach(([dx, dy]) => {
+                    const next = { gridX: cell.gridX + dx, gridY: cell.gridY + dy };
+                    const key = `${next.gridY},${next.gridX}`;
+                    if (!visited.has(key) && mazeGrid[next.gridY] && mazeGrid[next.gridY][next.gridX] === 0) {
+                        visited.add(key);
+                        queue.push(next);
+                    }
+                });
+            }
+
+            return reachable;
+        }
+
+        function saveMapState() {
+            localStorage.setItem('main_map_state', JSON.stringify({
+                mazeIndex: currentMazeIndex,
+                player,
+                portals: portals.map(portal => ({ id: portal.id, gridX: portal.gridX, gridY: portal.gridY }))
+            }));
+        }
+
+        function initializeMazeState() {
+            const savedStateRaw = localStorage.getItem('main_map_state');
+            if (savedStateRaw) {
+                try {
+                    const savedState = JSON.parse(savedStateRaw);
+                    if (Number.isInteger(savedState.mazeIndex) && mazeLayouts[savedState.mazeIndex]) {
+                        currentMazeIndex = savedState.mazeIndex;
+                        mazeGrid = mazeLayouts[currentMazeIndex];
+                        if (savedState.player && Number.isFinite(savedState.player.x) && Number.isFinite(savedState.player.y)) {
+                            player = savedState.player;
+                        }
+                        if (Array.isArray(savedState.portals)) {
+                            savedState.portals.forEach(savedPortal => {
+                                const portal = portals.find(item => item.id === savedPortal.id);
+                                if (portal && Number.isInteger(savedPortal.gridX) && Number.isInteger(savedPortal.gridY)) {
+                                    portal.gridX = savedPortal.gridX;
+                                    portal.gridY = savedPortal.gridY;
+                                }
+                            });
+                        }
+                        return;
+                    }
+                } catch (error) {
+                    localStorage.removeItem('main_map_state');
+                }
+            }
+
+            currentMazeIndex = Math.floor(Math.random() * mazeLayouts.length);
+            mazeGrid = mazeLayouts[currentMazeIndex];
+            player = cellToPlayerPosition(getStartCell());
+            randomizePortalPositions();
+            saveMapState();
+        }
+
+        function shuffleArray(items) {
+            for (let i = items.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [items[i], items[j]] = [items[j], items[i]];
+            }
+            return items;
+        }
+
+        function randomizePortalPositions() {
+            const startCell = getStartCell();
+            const pathCells = getReachablePathCells(startCell);
+            const minPortalDistance = 6;
+            const minStartDistance = 5;
+            const candidateCells = pathCells.filter(cell => {
+                const distanceFromStart = Math.hypot(cell.gridX - startCell.gridX, cell.gridY - startCell.gridY);
+                return distanceFromStart >= minStartDistance;
+            });
+
+            let selectedCells = [];
+            for (let attempt = 0; attempt < 80; attempt++) {
+                selectedCells = [];
+                const shuffledCells = shuffleArray([...candidateCells]);
+                for (const cell of shuffledCells) {
+                    const isFarEnough = selectedCells.every(selected => {
+                        const distance = Math.hypot(cell.gridX - selected.gridX, cell.gridY - selected.gridY);
+                        return distance >= minPortalDistance;
+                    });
+
+                    if (isFarEnough) {
+                        selectedCells.push(cell);
+                        if (selectedCells.length === portals.length) break;
+                    }
+                }
+
+                if (selectedCells.length === portals.length) break;
+            }
+
+            if (selectedCells.length < portals.length) {
+                selectedCells = shuffleArray([...candidateCells.length ? candidateCells : pathCells]).slice(0, portals.length);
+            }
+
+            portals.forEach((portal, index) => {
+                const cell = selectedCells[index];
+                portal.gridX = cell.gridX;
+                portal.gridY = cell.gridY;
+            });
+        }
 
         function loadSavedProgress() {
             if (localStorage.getItem('stage1_cleared') === 'true') progressState.stage1_cleared = true;
@@ -319,7 +490,15 @@
                 certBtn.className = "w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-extrabold text-xs cursor-pointer shadow-lg transition duration-300 flex items-center justify-center gap-2 transform hover:-translate-y-0.5 animate-bounce";
                 certBtn.innerHTML = `<i class="fa-solid fa-trophy"></i> พิมพ์ใบเกียรติบัตรคุณวุฒิเอก! 🎉`;
                 certBtn.onclick = function() {
-                    alert(`🏅 ยินดีด้วยกับคุณครูและนักเรียน "${document.getElementById('player-name-input').value}" ที่ผ่านภารกิจเขาวงกตถ้ำแก้วพิสดารครบถ้วนสมบูรณ์ครับ!`);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'พิชิตครบทุกด่าน!',
+                        text: `ยินดีด้วยกับคุณครูและนักเรียน "${document.getElementById('player-name-input').value}" ที่ผ่านภารกิจเขาวงกตถ้ำแก้วพิสดารครบถ้วนสมบูรณ์ครับ!`,
+                        confirmButtonText: 'รับทราบ',
+                        confirmButtonColor: '#10b981',
+                        background: '#0f172a',
+                        color: '#f8fafc'
+                    });
                 };
             } else {
                 certBtn.disabled = true;
@@ -415,7 +594,7 @@
                 const gridCol = Math.floor(pt.x / TILE_SIZE);
                 const gridRow = Math.floor(pt.y / TILE_SIZE);
 
-                if (mazeGrid[gridRow] && mazeGrid[gridRow][gridCol] === 1) {
+                if (!mazeGrid[gridRow] || mazeGrid[gridRow][gridCol] !== 0) {
                     isCollisionDetected = true;
                     break;
                 }
@@ -424,6 +603,7 @@
             if (!isCollisionDetected) {
                 player.x = nextX;
                 player.y = nextY;
+                saveMapState();
                 drawMaze();
                 evaluatePortalIntersection();
             }
@@ -439,17 +619,27 @@
                     if (portal.unlocked) {
                         launchStage(portal.id, portal.file);
                     } else {
-                        alert(`🔒 ด่านนี้ถูกค่ายกลสะกดไว้! คุณจำเป็นต้องเข้าไปตอบคำถามและผ่านภารกิจด่านก่อนหน้าให้สำเร็จก่อน จึงจะปลดล็อกทางไปต่อได้ครับ!`);
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'ด่านนี้ยังไม่เปิด',
+                            text: 'คุณจำเป็นต้องเข้าไปตอบคำถามและผ่านภารกิจด่านก่อนหน้าให้สำเร็จก่อน จึงจะปลดล็อกทางไปต่อได้ครับ!',
+                            confirmButtonText: 'กลับไปฝึกต่อ',
+                            confirmButtonColor: '#10b981',
+                            background: '#0f172a',
+                            color: '#f8fafc'
+                        }).then(() => {
+                            player = cellToPlayerPosition(getStartCell());
+                            saveMapState();
+                            drawMaze();
+                        });
                     }
-                    player.x = 45;
-                    player.y = 225;
-                    drawMaze();
                 }
             });
         }
 
         // ฟังก์ชันย้ายหน้าเว็บไปยังไฟล์ย่อยจริง
         function launchStage(id, filename) {
+            saveMapState();
             window.location.href = filename; 
         }
 
@@ -459,12 +649,26 @@
         }
 
 		function resetAllProgress() {
-			if (confirm("คุณต้องการล้างข้อมูลประวัติและเริ่มเดินเขาวงกตตั้งแต่ด่านแรกใหม่ใช่หรือไม่?")) {
-				localStorage.removeItem('stage1_cleared');
-				localStorage.removeItem('stage2_cleared');
-				localStorage.removeItem('stage3_cleared');
-				location.reload();
-			}
+			Swal.fire({
+                icon: 'question',
+                title: 'เริ่มต้นใหม่ทั้งหมด?',
+                text: 'คุณต้องการล้างข้อมูลประวัติและเริ่มเดินเขาวงกตตั้งแต่ด่านแรกใหม่ใช่หรือไม่?',
+                showCancelButton: true,
+                confirmButtonText: 'ล้างข้อมูล',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                background: '#0f172a',
+                color: '#f8fafc'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('stage1_cleared');
+                    localStorage.removeItem('stage2_cleared');
+                    localStorage.removeItem('stage3_cleared');
+                    localStorage.removeItem('main_map_state');
+                    location.reload();
+                }
+            });
 		}
 		
 
@@ -521,6 +725,7 @@
 
         window.onload = function() {
             initializePlayerNameGate();
+            initializeMazeState();
             loadSavedProgress();
             drawMaze();
         };

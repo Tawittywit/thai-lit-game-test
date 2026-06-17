@@ -6,6 +6,7 @@
     <title>ด่านที่ 3: นาฏเงาแก้วพิสดาร</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Google Fonts: Sarabun & Kanit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1070,7 +1071,15 @@
                 updateMissionUI(); 
                 
             } catch (e) {
-                alert("เกิดข้อผิดพลาดในการโหลดโมเดล โปรดตรวจสอบลิงก์ TM_MODEL_URL หรืออินเทอร์เน็ต");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'โหลดโมเดลไม่สำเร็จ',
+                    text: 'เกิดข้อผิดพลาดในการโหลดโมเดล โปรดตรวจสอบลิงก์ TM_MODEL_URL หรืออินเทอร์เน็ต',
+                    confirmButtonText: 'รับทราบ',
+                    confirmButtonColor: '#f59e0b',
+                    background: '#0f172a',
+                    color: '#f8fafc'
+                });
                 statusDiv.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> เกิดข้อผิดพลาดในการโหลดโมเดล';
                 statusDiv.className = "text-center font-bold text-lg p-4 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 transition-colors duration-300";
             }

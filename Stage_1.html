@@ -6,6 +6,7 @@
     <title>ด่านที่ 1: ค่ายกลกลอนอสุรี</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Google Fonts: Prompt & Sriracha -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1199,10 +1200,18 @@
 			localStorage.setItem('stage1_cleared', 'true');
 			
 			// แจ้งเตือนผู้เล่นหรือแสดงป๊อปอัพยินดีด้วย
-			alert("ยินดีด้วย! คุณไขรหัสฉันทลักษณ์สยบนางผีเสื้อสมุทรสำเร็จ และปลดล็อกด่านถัดไปแล้ว!");
-			
-			// ย้ายหน้ากลับมายังหน้าหลักระบบ
-			window.location.href = "Index.html";
+			Swal.fire({
+                icon: 'success',
+                title: 'ผ่านด่านที่ 1 แล้ว!',
+                text: 'ยินดีด้วย! คุณไขรหัสฉันทลักษณ์สยบนางผีเสื้อสมุทรสำเร็จ และปลดล็อกด่านถัดไปแล้ว!',
+                confirmButtonText: 'กลับหน้าหลัก',
+                confirmButtonColor: '#06b6d4',
+                background: '#0f172a',
+                color: '#f8fafc'
+            }).then(() => {
+                // ย้ายหน้ากลับมายังหน้าหลักระบบ
+                window.location.href = "Index.html";
+            });
 		}
     </script>
 </body>
