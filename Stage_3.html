@@ -173,7 +173,7 @@
                 คำใบ้ช่วยคิด
             </button>
             <button id="btnReset" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium px-6 py-3 rounded-xl transition border border-slate-700 flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 12H16M6 8l4-4M6 8L2 12"></path></svg>
+                <i class="fa-solid fa-rotate-right text-sm"></i>
                 เริ่มเล่นใหม่
             </button>
         </div>
@@ -615,6 +615,7 @@
             score = 0;
             scoreBadge.innerText = `0 / ${gameData.length}`;
             statusAlert.classList.add("hidden");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             // ล้างหน้าจอคอลัมน์เดิม
             gestureColumn.innerHTML = "";
@@ -661,7 +662,7 @@
                     </div>
                     <div class="flex justify-between items-center border-t border-slate-800/60 pt-2 text-xs">
                         <span class="text-slate-500">${item.poetSource}</span>
-                        <span class="text-amber-500/80 font-bold bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10">${item.emotion}</span>
+                        <span class="text-slate-500 bg-slate-950/50 px-2 py-0.5 rounded border border-slate-800">บทกลอนสำหรับวิเคราะห์</span>
                     </div>
                 `;
                 poemColumn.appendChild(card);
