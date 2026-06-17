@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="th" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หน้าหลักผจญภัย: เขาวงกตถ้ำแก้วพิสดารพระอภัยมณี</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
+        }
+        .thai-gold-text {
+            background: linear-gradient(to right, #ffe259, #ffa751);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        #map-canvas {
+            background-color: #050b18;
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.15);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 flex flex-col justify-between overflow-x-hidden selection:bg-emerald-500 selection:text-slate-950">
+
+    <header class="relative z-10 w-full bg-slate-950/80 backdrop-blur border-b border-emerald-500/30 px-4 py-3 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-gradient-to-tr from-emerald-500 to-teal-600 p-2.5 rounded-xl shadow-lg shadow-emerald-500/20">
+                    <i class="fa-solid fa-dungeon text-xl text-slate-950"></i>
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-xl font-bold bg-gradient-to-r from-emerald-300 via-teal-400 to-cyan-200 bg-clip-text text-transparent">วรรณคดีไทยเกมวิทยาทัศน์</h1>
+                    <p class="text-xs text-slate-400">แผนที่หลัก: เขาวงกตถ้ำแก้วพิสดาร [พระอภัยมณี]</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div class="text-xs bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl">
+                    <span class="text-slate-400">ผู้เล่น:</span> <span id="display-player-name" class="font-bold text-emerald-400">กวีน้อยสยบวารี</span>
+                </div>
+                <div class="text-xs bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-3 py-1.5 rounded-full font-semibold">
+                    <i class="fa-solid fa-key mr-1"></i> ผ่านแล้ว: <span id="cleared-count">0/3</span> ด่าน
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 flex flex-col lg:grid lg:grid-cols-12 gap-6 items-center justify-center">
+        
+        <div class="w-full lg:col-span-7 flex flex-col items-center space-y-3">
+            <div class="text-center lg:text-left w-full flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-emerald-400"><i class="fa-solid fa-compass mr-1"></i> ฝ่าเขาวงกตถ้ำพระอภัยมณี</h2>
+                    <p class="text-xs text-slate-400">กดปุ่มลูกศรเพื่อเดินหาด่าน (ต้องเล่นเรียงตามลำดับ 1 ➡️ 2 ➡️ 3)</p>
+                </div>
+                <button onclick="resetAllProgress()" class="text-2xs bg-red-950/40 text-red-400 border border-red-900/60 hover:bg-red-900 hover:text-white px-2 py-1 rounded transition">
+                    <i class="fa-solid fa-trash-can mr-1"></i> รีเซ็ตการเล่นใหม่
+                </button>
+            </div>
+
+            <div class="relative rounded-2xl overflow-hidden border-4 border-slate-800 bg-slate-950">
+                <canvas id="map-canvas" width="600" height="450" class="w-full max-w-[600px] aspect-[4/3] block"></canvas>
+                
+                <div class="absolute bottom-4 right-4 grid grid-cols-3 gap-1 w-28 h-28 opacity-75 hover:opacity-100 transition sm:hidden">
+                    <div></div>
+                    <button onclick="movePlayer('up')" class="bg-slate-800 text-emerald-400 active:bg-emerald-500 active:text-slate-950 rounded-lg flex items-center justify-center border border-slate-700"><i class="fa-solid fa-caret-up text-xl"></i></button>
+                    <div></div>
+                    <button onclick="movePlayer('left')" class="bg-slate-800 text-emerald-400 active:bg-emerald-500 active:text-slate-950 rounded-lg flex items-center justify-center border border-slate-700"><i class="fa-solid fa-caret-left text-xl"></i></button>
+                    <div class="bg-slate-900/80 rounded-lg border border-slate-800"></div>
+                    <button onclick="movePlayer('right')" class="bg-slate-800 text-emerald-400 active:bg-emerald-500 active:text-slate-950 rounded-lg flex items-center justify-center border border-slate-700"><i class="fa-solid fa-caret-right text-xl"></i></button>
+                    <div></div>
+                    <button onclick="movePlayer('down')" class="bg-slate-800 text-emerald-400 active:bg-emerald-500 active:text-slate-950 rounded-lg flex items-center justify-center border border-slate-700"><i class="fa-solid fa-caret-down text-xl"></i></button>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full lg:col-span-5 space-y-4">
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-2">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fa-solid fa-user-graduate mr-1"></i> นามนักเรียนผู้ผจญภัย:</label>
+                <input type="text" id="player-name-input" value="กวีน้อยสยบวารี" oninput="updatePlayerName()" class="w-full px-3 py-2 text-sm rounded-xl bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-emerald-500 transition">
+            </div>
+
+            <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 space-y-3">
+                <h3 class="text-xs font-bold text-emerald-400 uppercase tracking-widest border-b border-slate-800 pb-2"><i class="fa-solid fa-lock-open mr-1"></i> ประตูค่ายกลเขาวงกต</h3>
+                
+                <div class="space-y-3">
+                    <div id="status-card-1" class="p-3 bg-slate-950/80 border border-emerald-500/30 rounded-xl flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xl" id="icon-stage-1">👹</span>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-200">ด่านที่ 1: ค่ายกลกลอนอสุรี</h4>
+                                <p class="text-3xs text-slate-400" id="desc-stage-1">สถานะ: พร้อมท้าทายความรู้วรรณคดี</p>
+                            </div>
+                        </div>
+                        <button id="btn-stage-1" onclick="launchStage(1, 'Stage_1.html')" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-3xs font-extrabold transition">เข้าเล่น</button>
+                    </div>
+
+                    <div id="status-card-2" class="p-3 bg-slate-950/40 border border-slate-800 rounded-xl flex items-center justify-between opacity-50">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xl" id="icon-stage-2">🔒</span>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-400">ด่านที่ 2: ปี่แก้วสะท้านสมุทร</h4>
+                                <p class="text-3xs text-slate-500" id="desc-stage-2">สถานะ: ถูกล็อก (ต้องผ่านด่าน 1 ก่อน)</p>
+                            </div>
+                        </div>
+                        <button id="btn-stage-2" disabled onclick="launchStage(2, 'Stage_2.html')" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-500 text-3xs font-extrabold cursor-not-allowed transition">ล็อกอยู่</button>
+                    </div>
+
+                    <div id="status-card-3" class="p-3 bg-slate-950/40 border border-slate-800 rounded-xl flex items-center justify-between opacity-50">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xl" id="icon-stage-3">🔒</span>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-400">ด่านที่ 3: นาฏเงาแก้วพิสดาร</h4>
+                                <p class="text-3xs text-slate-500" id="desc-stage-3">สถานะ: ถูกล็อก (ต้องผ่านด่าน 2 ก่อน)</p>
+                            </div>
+                        </div>
+                        <button id="btn-stage-3" disabled onclick="launchStage(3, 'Stage_3.html')" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-500 text-3xs font-extrabold cursor-not-allowed transition">ล็อกอยู่</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gradient-to-br from-slate-900 to-emerald-950 rounded-2xl border-2 border-dashed border-emerald-500/30 text-center space-y-3 shadow-lg">
+                <span class="text-3xs bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">ใบประกาศคุณวุฒิ</span>
+                <h4 class="text-sm font-bold text-amber-300 thai-gold-text">ใบเกียรติบัตรกวีเอกผู้พิทักษ์ธรรม</h4>
+                <p class="text-3xs text-slate-400 leading-relaxed">เมื่อเคลียร์เขาวงกตครบถ้วนทั้ง 3 ด่าน ระบบจะปลดล็อกใบเกียรติบัตรอิเล็กทรอนิกส์ให้ทันที</p>
+                
+                <button id="btn-certificate" disabled class="w-full py-2.5 rounded-xl bg-slate-800 text-slate-500 font-extrabold text-xs cursor-not-allowed border border-slate-700 transition duration-300 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-lock"></i> ต้องผ่านด่านให้ครบทั้ง 3 ด่านก่อน
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full bg-slate-950/90 py-3 border-t border-slate-900 text-center text-3xs text-slate-500 px-4">
+        <p>© ๒๕๖๙ นวัตกรรมสื่อการสอนชุดพระอภัยมณีเขาวงกตค่ายกล.</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('map-canvas');
+        const ctx = canvas.getContext('2d');
+
+        const TILE_SIZE = 30;
+        let progressState = {
+            stage1_cleared: false,
+            stage2_cleared: false,
+            stage3_cleared: false
+        };
+
+        // Maze Definition (1=Wall, 0=Path)
+        const mazeGrid = [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1],
+            [1,0,1,1,1,0,1,0,1,1,1,1,0,1,0,1,1,1,0,1],
+            [1,0,1,0,0,0,0,0,1,0,0,1,0,0,0,1,0,1,0,1], 
+            [1,0,1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,0,1],
+            [1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+            [1,1,1,0,1,0,1,1,1,1,1,1,1,1,0,1,0,1,1,1],
+            [1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1], 
+            [1,0,1,1,1,1,1,0,1,1,1,1,0,1,1,1,1,1,0,1],
+            [1,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1],
+            [1,0,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,0,1],
+            [1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1],
+            [1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1],
+            [1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        ];
+
+        let player = { x: 45, y: 225 }; 
+        
+        const portals = [
+            { id: 1, name: "ค่ายกลกลอนอสุรี", gridX: 3, gridY: 3, emoji: "👹", unlocked: true, color: "#10b981", file: "Stage_1.html" },
+            { id: 2, name: "ปี่แก้วสะท้านสมุทร", gridX: 16, gridY: 3, emoji: "🦈", unlocked: false, color: "#f59e0b", file: "Stage_2.html" },
+            { id: 3, name: "นาฏเงาแก้วพิสดาร", gridX: 10, gridY: 11, emoji: "💃", unlocked: false, color: "#ec4899", file: "Stage_3.html" }
+        ];
+
+        function loadSavedProgress() {
+            if (localStorage.getItem('stage1_cleared') === 'true') progressState.stage1_cleared = true;
+            if (localStorage.getItem('stage2_cleared') === 'true') progressState.stage2_cleared = true;
+            if (localStorage.getItem('stage3_cleared') === 'true') progressState.stage3_cleared = true;
+
+            portals[1].unlocked = progressState.stage1_cleared; 
+            portals[2].unlocked = progressState.stage2_cleared; 
+
+            refreshUIElements();
+        }
+
+        function refreshUIElements() {
+            let clearedCounter = 0;
+
+            if (progressState.stage1_cleared) {
+                clearedCounter++;
+                document.getElementById('status-card-1').className = "p-3 bg-emerald-950/50 border border-emerald-500 rounded-xl flex items-center justify-between";
+                document.getElementById('desc-stage-1').innerHTML = "<span class='text-emerald-400 font-bold'><i class='fa-solid fa-circle-check'></i> ผ่านภารกิจแล้ว</span>";
+                document.getElementById('icon-stage-1').textContent = "✅";
+            }
+
+            const card2 = document.getElementById('status-card-2');
+            const btn2 = document.getElementById('btn-stage-2');
+            if (progressState.stage1_cleared) {
+                card2.classList.remove('opacity-50');
+                btn2.disabled = false;
+                btn2.className = "px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-3xs font-extrabold transition";
+                btn2.textContent = "เข้าเล่น";
+                document.getElementById('icon-stage-2').textContent = "🦈";
+                document.getElementById('desc-stage-2').className = "text-3xs text-slate-400";
+                document.getElementById('desc-stage-2').textContent = "สถานะ: ค่ายกลคลื่นเสียงเปิดออกแล้ว";
+            }
+            if (progressState.stage2_cleared) {
+                clearedCounter++;
+                card2.className = "p-3 bg-emerald-950/50 border border-emerald-500 rounded-xl flex items-center justify-between";
+                document.getElementById('desc-stage-2').innerHTML = "<span class='text-emerald-400 font-bold'><i class='fa-solid fa-circle-check'></i> ผ่านภารกิจแล้ว</span>";
+                document.getElementById('icon-stage-2').textContent = "✅";
+            }
+
+            const card3 = document.getElementById('status-card-3');
+            const btn3 = document.getElementById('btn-stage-3');
+            if (progressState.stage2_cleared) {
+                card3.classList.remove('opacity-50');
+                btn3.disabled = false;
+                btn3.className = "px-3 py-1.5 rounded-lg bg-pink-500 hover:bg-pink-400 text-white text-3xs font-extrabold transition";
+                btn3.textContent = "เข้าเล่น";
+                document.getElementById('icon-stage-3').textContent = "💃";
+                document.getElementById('desc-stage-3').className = "text-3xs text-slate-400";
+                document.getElementById('desc-stage-3').textContent = "สถานะ: โรงนาฏเงาเปิดม่านแล้ว";
+            }
+            if (progressState.stage3_cleared) {
+                clearedCounter++;
+                card3.className = "p-3 bg-emerald-950/50 border border-emerald-500 rounded-xl flex items-center justify-between";
+                document.getElementById('desc-stage-3').innerHTML = "<span class='text-emerald-400 font-bold'><i class='fa-solid fa-circle-check'></i> ผ่านภารกิจแล้ว</span>";
+                document.getElementById('icon-stage-3').textContent = "✅";
+            }
+
+            document.getElementById('cleared-count').textContent = clearedCounter;
+
+            const certBtn = document.getElementById('btn-certificate');
+            if (clearedCounter === 3) {
+                certBtn.disabled = false;
+                certBtn.className = "w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-950 font-extrabold text-xs cursor-pointer shadow-lg transition duration-300 flex items-center justify-center gap-2 transform hover:-translate-y-0.5 animate-bounce";
+                certBtn.innerHTML = `<i class="fa-solid fa-trophy"></i> พิมพ์ใบเกียรติบัตรคุณวุฒิเอก! 🎉`;
+                certBtn.onclick = function() {
+                    alert(`🏅 ยินดีด้วยกับคุณครูและนักเรียน "${document.getElementById('player-name-input').value}" ที่ผ่านภารกิจเขาวงกตถ้ำแก้วพิสดารครบถ้วนสมบูรณ์ครับ!`);
+                };
+            } else {
+                certBtn.disabled = true;
+                certBtn.className = "w-full py-2.5 rounded-xl bg-slate-800 text-slate-500 font-extrabold text-xs cursor-not-allowed border border-slate-700 transition duration-300 flex items-center justify-center gap-2";
+                certBtn.innerHTML = `<i class="fa-solid fa-lock"></i> ยังผ่านด่านไม่ครบ (เหลืออีก ${3 - clearedCounter} ด่าน)`;
+            }
+        }
+
+        function drawMaze() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let row = 0; row < mazeGrid.length; row++) {
+                for (let col = 0; col < mazeGrid[row].length; col++) {
+                    if (mazeGrid[row][col] === 1) {
+                        ctx.fillStyle = "#1e293b";
+                        ctx.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                        ctx.strokeStyle = "#0f172a";
+                        ctx.strokeRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    } else {
+                        ctx.fillStyle = "#030712";
+                        ctx.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    }
+                }
+            }
+
+            portals.forEach(portal => {
+                const px = portal.gridX * TILE_SIZE + TILE_SIZE / 2;
+                const py = portal.gridY * TILE_SIZE + TILE_SIZE / 2;
+                const radius = TILE_SIZE / 2 - 2;
+
+                ctx.beginPath();
+                ctx.arc(px, py, radius + 4, 0, Math.PI * 2);
+                ctx.fillStyle = portal.unlocked ? portal.color + "22" : "rgba(244,63,94,0.1)";
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(px, py, radius, 0, Math.PI * 2);
+                ctx.fillStyle = "#020617";
+                ctx.fill();
+                ctx.strokeStyle = portal.unlocked ? portal.color : "#ef4444";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.font = "14px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                if (portal.unlocked) {
+                    ctx.fillText(portal.emoji, px, py);
+                } else {
+                    ctx.fillText("🔒", px, py);
+                }
+
+                ctx.font = "bold 9px Kanit";
+                ctx.fillStyle = portal.unlocked ? "#cbd5e1" : "#f43f5e";
+                ctx.fillText(portal.name, px, py - TILE_SIZE / 2 - 5);
+            });
+
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, TILE_SIZE / 2 - 4, 0, Math.PI * 2);
+            ctx.fillStyle = "#10b981";
+            ctx.fill();
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            ctx.font = "11px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("🧒", player.x, player.y);
+        }
+
+        function movePlayer(direction) {
+            let nextX = player.x;
+            let nextY = player.y;
+            const step = 15; 
+
+            if (direction === 'up') nextY -= step;
+            if (direction === 'down') nextY += step;
+            if (direction === 'left') nextX -= step;
+            if (direction === 'right') nextX += step;
+
+            const checkPoints = [
+                { x: nextX - 10, y: nextY - 10 },
+                { x: nextX + 10, y: nextY - 10 },
+                { x: nextX - 10, y: nextY + 10 },
+                { x: nextX + 10, y: nextY + 10 }
+            ];
+
+            let isCollisionDetected = false;
+            for (let pt of checkPoints) {
+                const gridCol = Math.floor(pt.x / TILE_SIZE);
+                const gridRow = Math.floor(pt.y / TILE_SIZE);
+
+                if (mazeGrid[gridRow] && mazeGrid[gridRow][gridCol] === 1) {
+                    isCollisionDetected = true;
+                    break;
+                }
+            }
+
+            if (!isCollisionDetected) {
+                player.x = nextX;
+                player.y = nextY;
+                drawMaze();
+                evaluatePortalIntersection();
+            }
+        }
+
+        function evaluatePortalIntersection() {
+            portals.forEach(portal => {
+                const pTargetX = portal.gridX * TILE_SIZE + TILE_SIZE / 2;
+                const pTargetY = portal.gridY * TILE_SIZE + TILE_SIZE / 2;
+                const gap = Math.hypot(player.x - pTargetX, player.y - pTargetY);
+
+                if (gap < TILE_SIZE / 2 + 8) {
+                    if (portal.unlocked) {
+                        launchStage(portal.id, portal.file);
+                    } else {
+                        alert(`🔒 ด่านนี้ถูกค่ายกลสะกดไว้! คุณจำเป็นต้องเข้าไปตอบคำถามและผ่านภารกิจด่านก่อนหน้าให้สำเร็จก่อน จึงจะปลดล็อกทางไปต่อได้ครับ!`);
+                    }
+                    player.x = 45;
+                    player.y = 225;
+                    drawMaze();
+                }
+            });
+        }
+
+        // ฟังก์ชันย้ายหน้าเว็บไปยังไฟล์ย่อยจริง
+        function launchStage(id, filename) {
+            window.location.href = filename; 
+        }
+
+        function updatePlayerName() {
+            const val = document.getElementById('player-name-input').value.trim();
+            document.getElementById('display-player-name').textContent = val || "นักเรียนกวีน้อย";
+        }
+
+		function resetAllProgress() {
+			if (confirm("คุณต้องการล้างข้อมูลประวัติและเริ่มเดินเขาวงกตตั้งแต่ด่านแรกใหม่ใช่หรือไม่?")) {
+				localStorage.removeItem('stage1_cleared');
+				localStorage.removeItem('stage2_cleared');
+				localStorage.removeItem('stage3_cleared');
+				location.reload();
+			}
+		}
+		
+
+		function checkStageProgress() {
+			// 1. ดึงสถานะการผ่านด่านจาก LocalStorage
+			const stage1Cleared = localStorage.getItem('stage1_cleared') === 'true';
+			const stage2Cleared = localStorage.getItem('stage2_cleared') === 'true';
+			const stage3Cleared = localStorage.getItem('stage3_cleared') === 'true';
+
+			// นับจำนวนด่านที่ผ่านแล้วมาแสดงผลที่ UI หน้าจอหลัก
+			let clearedCount = 0;
+			if (stage1Cleared) clearedCount++;
+			if (stage2Cleared) clearedCount++;
+			if (stage3Cleared) clearedCount++;
+			
+			const countEl = document.getElementById('cleared-count');
+			if (countEl) countEl.textContent = `${clearedCount}/3`;
+
+			// 2. ควบคุมด่านที่ 2 (จะเล่นได้เมื่อผ่านด่านที่ 1 แล้ว)
+			const stage2Button = document.getElementById('btn-stage-2'); // แก้ ID ให้ตรงกับปุ่มเข้าด่าน 2 ของคุณ
+			if (stage2Button) {
+				if (stage1Cleared) {
+					stage2Button.disabled = false;
+					stage2Button.className = "px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs hover:bg-amber-400 transition cursor-pointer";
+					stage2Button.innerHTML = '<i class="fa-solid fa-play mr-1"></i> เข้าผจญภัยด่าน 2';
+				} else {
+					stage2Button.disabled = true;
+					stage2Button.className = "px-4 py-2 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs border border-slate-700 cursor-not-allowed";
+					stage2Button.innerHTML = '<i class="fa-solid fa-lock mr-1"></i> ล็อก (ต้องผ่านด่าน 1 ก่อน)';
+				}
+			}
+
+			// 3. ควบคุมด่านที่ 3 (จะเล่นได้เมื่อผ่านด่านที่ 2 แล้ว)
+			const stage3Button = document.getElementById('btn-stage-3'); // แก้ ID ให้ตรงกับปุ่มเข้าด่าน 3 ของคุณ
+			if (stage3Button) {
+				if (stage2Cleared) {
+					stage3Button.disabled = false;
+					stage3Button.className = "px-4 py-2 rounded-xl bg-indigo-500 text-slate-100 font-bold text-xs hover:bg-indigo-400 transition cursor-pointer";
+					stage3Button.innerHTML = '<i class="fa-solid fa-play mr-1"></i> เข้าผจญภัยด่าน 3';
+				} else {
+					stage3Button.disabled = true;
+					stage3Button.className = "px-4 py-2 rounded-xl bg-slate-800 text-slate-500 font-bold text-xs border border-slate-700 cursor-not-allowed";
+					stage3Button.innerHTML = '<i class="fa-solid fa-lock mr-1"></i> ล็อก (ต้องผ่านด่าน 2 ก่อน)';
+				}
+			}
+		}
+		
+		window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') { e.preventDefault(); movePlayer('up'); }
+            if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') { e.preventDefault(); movePlayer('down'); }
+            if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') { e.preventDefault(); movePlayer('left'); }
+            if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') { e.preventDefault(); movePlayer('right'); }
+        });
+
+        window.onload = function() {
+            loadSavedProgress();
+            drawMaze();
+        };
+		
+
+		// เรียกใช้งานทุกครั้งเมื่อหน้าหลักถูกโหลดขึ้นมา
+		window.addEventListener('DOMContentLoaded', () => {
+			checkStageProgress();
+		});
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เกมเรียงกลอนพระอภัยมณี: ตะลุยด่านอสุรีผีเสื้อน้ำ</title>
+    <title>ด่านที่ 1: ค่ายกลกลอนอสุรี</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Prompt & Sriracha -->
@@ -62,10 +62,14 @@
                 </div>
                 <div>
                     <h1 class="text-base sm:text-xl font-bold bg-gradient-to-r from-cyan-300 via-blue-400 to-teal-200 bg-clip-text text-transparent">วรรณคดีไทยเกมวิทยาทัศน์</h1>
-                    <p class="text-xs text-slate-400">บทเรียนบทกลอน: กำเนิดนางอสุรีผีเสื้อน้ำ</p>
+                    <p class="text-xs text-slate-400">ด่านที่ 1: ค่ายกลกลอนอสุรี</p>
                 </div>
             </div>
             <div class="flex items-center gap-3">
+                <a href="Index.html" class="px-3 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-cyan-500/30 text-cyan-300 text-xs font-bold transition flex items-center gap-2">
+                    <i class="fa-solid fa-house"></i>
+                    <span class="hidden sm:inline">กลับหน้าหลัก</span>
+                </a>
                 <button onclick="toggleAudio()" class="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-cyan-400 transition" title="เปิด/ปิดเสียง">
                     <i id="audio-icon" class="fa-solid fa-volume-high"></i>
                 </button>
@@ -82,19 +86,19 @@
         <section id="screen-start" class="space-y-8 animate-fade-in">
             <div class="text-center max-w-3xl mx-auto space-y-4">
                 <span class="px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/40 text-cyan-400 text-xs sm:text-sm font-semibold tracking-wider uppercase">
-                    เรียนรู้ความงามของฉันทลักษณ์กลอนสุภาพไทย
+                    ด่านที่ 1: ค่ายกลกลอนอสุรี
                 </span>
                 <h2 class="text-4xl sm:text-6xl font-bold text-slate-100 thai-title tracking-wide leading-tight pt-2 drop-shadow-md">
-                    อภินิหารอสุรีผีเสื้อน้ำ
+                    จัดกลอนสยบอสุรี
                 </h2>
                 <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto font-light leading-relaxed">
-                    สวมบทบาทกวีน้อยผู้อาสาจัดระเบียบเกราะพิทักษ์ธรรมมะ ไขรหัสฉันทลักษณ์กลอนแปดโบราณเพื่อสยบมนตรายักษีแห่งห้วงวังวนมหาสมุทร มี 3 ด่านท้าทายให้ทดสอบ!
+                    เรียงบทกลอนพระอภัยมณีให้ถูกฉันทลักษณ์และจับคู่คำศัพท์วรรณคดี เพื่อผ่านด่านแรกของเขาวงกตถ้ำแก้วพิสดาร
                 </p>
             </div>
 
             <!-- Stage Selector Cards -->
             <div class="space-y-3 max-w-4xl mx-auto">
-                <h3 class="text-xs font-bold text-cyan-400 tracking-widest uppercase text-center sm:text-left"><i class="fa-solid fa-map-location-dot mr-1"></i> แผนที่การเดินทางศึกษาด่านกลอน (3 ด่านย่อย)</h3>
+                <h3 class="text-xs font-bold text-cyan-400 tracking-widest uppercase text-center sm:text-left"><i class="fa-solid fa-map-location-dot mr-1"></i> เฟสของด่านที่ 1</h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Stage 1 -->
@@ -102,7 +106,7 @@
                         <div class="absolute -right-8 -top-8 text-cyan-500/10 text-8xl pointer-events-none font-bold">1</div>
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs px-2.5 py-1 rounded-md bg-cyan-950 text-cyan-300 font-bold border border-cyan-800">ด่านที่ 1</span>
+                                <span class="text-xs px-2.5 py-1 rounded-md bg-cyan-950 text-cyan-300 font-bold border border-cyan-800">เฟส 1</span>
                                 <span class="text-2xs text-emerald-400 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> พร้อมเรียนรู้</span>
                             </div>
                             <h4 class="text-base font-bold text-slate-100 group-hover:text-cyan-300 transition">กำเนิดยักษีชลสาย</h4>
@@ -110,7 +114,7 @@
                                 "จะกล่าวถึงนางอสุรีผีเสื้อน้ำ..." สำรวจที่อยู่ อำนาจบารมี และพละกำลังมหาศาลของยักษีใต้มหาสมุทร
                             </p>
                         </div>
-                        <button onclick="selectLevel(0)" class="w-full mt-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs hover:bg-cyan-400 transition">เข้าผจญภัยด่าน 1</button>
+                        <button onclick="selectLevel(0)" class="w-full mt-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs hover:bg-cyan-400 transition">เริ่มเฟส 1</button>
                     </div>
 
                     <!-- Stage 2 -->
@@ -118,7 +122,7 @@
                         <div class="absolute -right-8 -top-8 text-slate-800 text-8xl pointer-events-none font-bold">2</div>
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs px-2.5 py-1 rounded-md bg-slate-950 text-slate-400 font-bold border border-slate-800">ด่านที่ 2</span>
+                                <span class="text-xs px-2.5 py-1 rounded-md bg-slate-950 text-slate-400 font-bold border border-slate-800">เฟส 2</span>
                                 <span id="badge-lock-1" class="text-2xs text-amber-500 flex items-center gap-1"><i class="fa-solid fa-lock"></i> ปลดล็อกอัตโนมัติ</span>
                             </div>
                             <h4 class="text-base font-bold text-slate-200 group-hover:text-cyan-300 transition">จับภักษาปักษาสมุทร</h4>
@@ -134,7 +138,7 @@
                         <div class="absolute -right-8 -top-8 text-slate-800 text-8xl pointer-events-none font-bold">3</div>
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs px-2.5 py-1 rounded-md bg-slate-950 text-slate-400 font-bold border border-slate-800">ด่านที่ 3</span>
+                                <span class="text-xs px-2.5 py-1 rounded-md bg-slate-950 text-slate-400 font-bold border border-slate-800">เฟส 3</span>
                                 <span id="badge-lock-2" class="text-2xs text-amber-500 flex items-center gap-1"><i class="fa-solid fa-lock"></i> ปลดล็อกอัตโนมัติ</span>
                             </div>
                             <h4 class="text-base font-bold text-slate-200 group-hover:text-cyan-300 transition">สยายมนตราบทพิโรธ</h4>
@@ -147,16 +151,8 @@
                 </div>
             </div>
 
-            <!-- Start Controls -->
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4 max-w-lg mx-auto">
-                <div class="w-full">
-                    <label class="block text-xs text-slate-400 mb-1 font-semibold ml-1"><i class="fa-solid fa-signature"></i> นามของผู้ประพันธ์บันทึกเกียรติยศ:</label>
-                    <input type="text" id="player-name" placeholder="ระบุชื่อของคุณที่นี่..." value="กวีน้อยสยบวารี" class="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-cyan-500/30 focus:outline-none focus:border-cyan-400 text-slate-100 placeholder-slate-500 transition shadow-inner">
-                </div>
-            </div>
-            
             <div class="text-center">
-                <p class="text-2xs text-slate-500">หมายเหตุ: ระบบจะนำคะแนนสะสมและเวลาจากการผ่านแต่ละด่านไปสังเคราะห์บนเกียรติบัตรเกียรติยศสูงสุด</p>
+                <p class="text-2xs text-slate-500">หมายเหตุ: ผ่านทั้ง 3 เฟสเพื่อปลดล็อกด่านที่ 2 บนหน้าหลัก</p>
             </div>
         </section>
 
@@ -167,8 +163,8 @@
                 <div class="flex items-center gap-3">
                     <span class="text-2xl" id="stage-icon">👹</span>
                     <div>
-                        <h4 class="text-xs text-slate-400">ด่านที่กำลังท้าทาย</h4>
-                        <p class="text-sm font-bold text-cyan-300" id="stage-title-text">ด่านที่ 1: กำเนิดยักษี</p>
+                        <h4 class="text-xs text-slate-400">เฟสที่กำลังท้าทาย</h4>
+                        <p class="text-sm font-bold text-cyan-300" id="stage-title-text">เฟส 1: กำเนิดยักษี</p>
                     </div>
                 </div>
                 
@@ -215,7 +211,7 @@
                 <div class="lg:col-span-7 bg-slate-900/50 rounded-2xl p-4 sm:p-6 border border-slate-800/80 space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-2 border-b border-slate-800/80 gap-2">
                         <h4 class="text-xs font-semibold text-cyan-400 tracking-wider uppercase"><i class="fa-solid fa-arrow-down-short-wide"></i> บรรจุกลอนลงในแผ่นวรรคทั้งสี่</h4>
-                        <span class="text-3xs text-slate-400">(คลิกเพื่อใส่แผ่นกลอนขวา หรือคลิกช่องที่ใส่อยู่เพื่อเอาออก)</span>
+                        <span class="text-3xs text-slate-400">(ลากแผ่นกลอนไปวางในช่อง หรือคลิกเพื่อใส่อัตโนมัติ)</span>
                     </div>
 
                     <!-- Beautifully rendered Slots based on Klon Paed layout -->
@@ -300,7 +296,7 @@
                     บททดสอบความรู้ระดับพิเศษ
                 </span>
                 <h3 class="text-3xl font-extrabold text-cyan-300 thai-title">เปิดพจนานุกรมสัตว์สมุทรแลคำยาก</h3>
-                <p class="text-xs text-slate-400">จับคู่คำศัพท์ยากจากบทกวีเพื่อสะสมดาวประดับเกียรติบัตรขั้นสูงสุด</p>
+                <p class="text-xs text-slate-400">ลากคำศัพท์ไปวางบนความหมายที่ถูกต้อง เพื่อสะสมดาวประดับเกียรติบัตรขั้นสูงสุด</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start py-4">
@@ -331,21 +327,21 @@
             </div>
         </section>
 
-        <!-- Screen 4: Dynamic Score Showcase & Certificate Printout -->
+        <!-- Screen 4: Completion Summary -->
         <section id="screen-score" class="hidden space-y-8 animate-fade-in max-w-3xl mx-auto">
             <div class="text-center space-y-2">
                 <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-tr from-cyan-400 to-teal-500 text-slate-950 text-4xl shadow-xl shadow-cyan-500/30">
                     🏅
                 </div>
-                <h2 class="text-3xl sm:text-4xl font-bold text-cyan-300 thai-title">บรรลุเป้าหมายกวีศึกษา</h2>
-                <p class="text-slate-400 text-xs">ท่านประสมเกราะมนต์วิเศษและถอดความหมายสยบอสุรีสำเร็จสิ้น</p>
+                <h2 class="text-3xl sm:text-4xl font-bold text-cyan-300 thai-title">ผ่านด่านอสุรีผีเสื้อน้ำ</h2>
+                <p class="text-slate-400 text-xs">ระบบบันทึกสถานะผ่านด่านที่ 1 เรียบร้อยแล้ว ด่านที่ 2 จะถูกปลดล็อกบนหน้าหลัก</p>
             </div>
 
             <!-- Statistical Overview Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
                 <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
-                    <div class="text-3xs text-slate-400 uppercase tracking-wider">ด่านกวีที่ชนะเรียบร้อย</div>
-                    <div class="text-xl font-bold text-cyan-400 mt-1">3 / 3 ด่านวรรค</div>
+                    <div class="text-3xs text-slate-400 uppercase tracking-wider">เฟสที่ผ่านเรียบร้อย</div>
+                    <div class="text-xl font-bold text-cyan-400 mt-1">3 / 3 เฟส</div>
                 </div>
                 <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
                     <div class="text-3xs text-slate-400 uppercase tracking-wider">มินิเกมโบราณอักษร</div>
@@ -357,66 +353,20 @@
                 </div>
             </div>
 
-            <!-- Printable Certificate Display Container (Thai Classical Aesthetic Theme) -->
-            <div id="certificate" class="relative bg-gradient-to-br from-cyan-50 via-teal-50 to-emerald-50 text-slate-900 p-8 sm:p-12 rounded-2xl border-8 border-double border-teal-800 shadow-2xl overflow-hidden mx-auto max-w-2xl select-none">
-                <!-- Golden elegant vector border layers inside certificate -->
-                <div class="absolute inset-2 border border-teal-700/40 rounded-lg pointer-events-none"></div>
-                <div class="absolute inset-4 border-2 border-dashed border-teal-800/30 rounded pointer-events-none"></div>
-                
-                <div class="absolute -right-16 -bottom-16 text-slate-300/30 text-9xl font-bold pointer-events-none select-none thai-title rotate-12">กวีเอก</div>
-                
-                <div class="text-center space-y-4 relative z-10">
-                    <div class="text-2xs sm:text-xs font-bold text-teal-900 uppercase tracking-widest">สถาบันอักษรศาสตร์และกวีไทยวิทยาทัศน์คีรีเขตต์</div>
-                    
-                    <h3 class="text-2xl sm:text-4xl font-extrabold text-teal-900 thai-title leading-tight tracking-wide">
-                        ใบเกียรติบัตรกวีเอกผู้พิทักษ์ธรรม
-                    </h3>
-                    
-                    <p class="text-3xs sm:text-2xs text-slate-600 max-w-md mx-auto">
-                        ขอมอบใบรับรองอิเล็กทรอนิกส์ฉบับนี้เพื่อเป็นเกียรติประดับแผ่นดินแก่กวีน้อยผู้เปรื่องปราด
-                    </p>
-                    
-                    <div class="py-4">
-                        <span id="cert-player-name" class="text-lg sm:text-2xl font-extrabold border-b-2 border-dashed border-teal-900/60 pb-1 px-8 text-teal-950 font-serif">
-                            - กวีน้อยสยบวารี -
-                        </span>
-                    </div>
-
-                    <p class="text-2xs sm:text-xs text-slate-700 leading-relaxed max-w-lg mx-auto">
-                        ผู้สามารถฝ่าฟันอุปสรรคการจำแนกฉันทลักษณ์และเสียงสัมผัสกลอนสุภาพในตอน <br>
-                        <strong class="text-teal-950">"กำเนิดและฤทธิเดชอสุรีผีเสื้อน้ำ"</strong> <br>
-                        จัดเรียงสำเร็จอย่างลื่นไหลและไขความหมายศัพท์สัตว์สมุทรไทยโบราณได้อย่างเชี่ยวชาญ
-                    </p>
-
-                    <!-- Star Ratings decoration -->
-                    <div class="flex justify-center gap-1.5 py-1 text-yellow-500 text-lg">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 pt-6 text-3xs sm:text-2xs text-slate-600">
-                        <div>
-                            <p class="font-bold text-teal-950">ประทับเกียรติภาพ ณ วันสัมฤทธิ์ผล</p>
-                            <p id="cert-formatted-date" class="mt-0.5">๑๖ มิถุนายน ๒๕๖๙</p>
-                        </div>
-                        <div>
-                            <p class="font-bold text-teal-950">ผู้พิจารณาตัดสินคุณวุฒิ</p>
-                            <p class="italic text-teal-900 font-semibold mt-0.5">ครูสุนทรภู่อัครกวีศรีแผ่นดิน</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="bg-slate-900/60 border border-emerald-500/30 rounded-2xl p-6 text-center space-y-3">
+                <div class="text-emerald-300 text-lg font-bold"><i class="fa-solid fa-circle-check"></i> ปลดล็อกเส้นทางถัดไปแล้ว</div>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    คุณผ่านครบทั้ง 3 เฟสของด่านที่ 1 แล้ว กลับไปหน้าหลักเพื่อเข้าสู่ด่านที่ 2: ปี่แก้วสะท้านสมุทร
+                </p>
             </div>
 
             <!-- Score Controls -->
             <div class="flex flex-wrap justify-center gap-4">
-                <button onclick="printPoetryCertificate()" class="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-cyan-300 font-medium text-xs transition flex items-center gap-2">
-                    <i class="fa-solid fa-print"></i> พิมพ์ใบเกียรติบัตรคุณวุฒิ
+                <button onclick="goToStart()" class="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-cyan-300 font-medium text-xs transition flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-left"></i> ทบทวนเฟสในด่านนี้
                 </button>
-                <button onclick="restartFullGame()" class="px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs transition shadow-lg shadow-cyan-500/20">
-                    <i class="fa-solid fa-rotate-left"></i> ย้อนกลับไปหน้าหลัก
+                <button onclick="window.location.href='Index.html'" class="px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs transition shadow-lg shadow-cyan-500/20">
+                    <i class="fa-solid fa-house"></i> กลับหน้าหลัก
                 </button>
             </div>
         </section>
@@ -448,7 +398,7 @@
         const poetryLevels = [
             {
                 id: 0,
-                title: "ด่านที่ 1: กำเนิดยักษีชลสาย",
+                title: "เฟส 1: กำเนิดยักษีชลสาย",
                 icon: "👹",
                 helpText: "บทนี้กลอนนำพาเข้าสู่นิเวศน์ของยักษี คำว่า 'น้ำ' สัมผัสลงท้ายไปเชื่อม 'ถ้ำ', คำว่า 'สาย' คล้องจองประสานกับคำว่า 'พราย' ในวรรคถัดมา และต่อยอดสัมผัสไปยัง 'กาย' อีกด้วยครับ",
                 verses: [
@@ -466,7 +416,7 @@
             },
             {
                 id: 1,
-                title: "ด่านที่ 2: จับภักษาปักษาสมุทร",
+                title: "เฟส 2: จับภักษาปักษาสมุทร",
                 icon: "🦈",
                 helpText: "บทนี้พรรณาช่วงเวลาหาภักษาหาร ท่องกินปลาและสัตว์ดึกดำบรรพ์ คำลงท้าย 'กว้าง' คล้องจองกับ 'กลาง', คำว่า 'มัจฉา' (ปลา) ไปเชื่อมกับ 'กุมภา' (จระเข้) และต่อกับคำว่า 'ภักษา' ได้ถูกต้องพึงสังเกต",
                 verses: [
@@ -484,7 +434,7 @@
             },
             {
                 id: 2,
-                title: "ด่านที่ 3: สยายมนตราบทพิโรธ",
+                title: "เฟส 3: สยายมนตราบทพิโรธ",
                 icon: "⚡",
                 helpText: "ฉากสยบขู่ตะคอกด้วยความรักอันเดือดพล่าน คำว่า 'ทะลึ่ง' สัมผัสภายในพ้องกับ 'ผึง', ลงเสียงส่งวรรคถัดไปสอดส่ายสายสัมพันธ์ 'ผัว' กับ 'ตัว' และ 'หัว' เป็นไปตามฉันทลักษณ์ทองคำอย่างยิ่ง",
                 verses: [
@@ -513,7 +463,11 @@
 
         // Core Game States tracking variables
         let currentLevelIndex = 0;
-        let unlockedLevels = [true, false, false]; // Progressively unlocking stage 1, 2, 3
+        let unlockedLevels = [
+            true,
+            localStorage.getItem('stage1_phase2_unlocked') === 'true' || localStorage.getItem('stage1_cleared') === 'true',
+            localStorage.getItem('stage1_phase3_unlocked') === 'true' || localStorage.getItem('stage1_cleared') === 'true'
+        ];
         let userSlots = Array(4).fill(null);
         let activeShuffledDeck = [];
         
@@ -526,6 +480,25 @@
         let selectedVocabWord = null;
         let selectedVocabMeaning = null;
         let solvedVocabCount = 0;
+
+        const poetryCardClass = "p-3 sm:p-4 bg-slate-800/80 hover:bg-slate-700 hover:border-cyan-400 border border-slate-700/60 rounded-xl cursor-grab active:cursor-grabbing text-xs sm:text-sm text-slate-100 font-medium transition duration-200 shadow-md flex justify-between items-center group transform hover:-translate-x-1";
+        const vocabWordBaseClass = "vocab-word-btn w-full p-4 text-left bg-slate-850 hover:bg-slate-800 hover:border-cyan-400 border border-slate-700/60 rounded-xl text-xs sm:text-sm font-bold text-cyan-200 transition flex justify-between items-center cursor-grab active:cursor-grabbing";
+        const vocabMeaningBaseClass = "vocab-meaning-btn w-full p-4 text-left bg-slate-850 hover:bg-slate-800 hover:border-teal-400 border border-slate-700/60 rounded-xl text-2xs sm:text-xs text-slate-300 transition flex justify-between items-center leading-relaxed";
+        const vocabWordSelectedClass = "vocab-word-btn w-full p-4 text-left bg-cyan-500/20 border-2 border-cyan-400 rounded-xl text-xs sm:text-sm font-bold text-cyan-300 transition flex justify-between items-center shadow-lg shadow-cyan-500/10 cursor-grab active:cursor-grabbing";
+        const vocabMeaningSelectedClass = "vocab-meaning-btn w-full p-4 text-left bg-teal-500/20 border-2 border-teal-400 rounded-xl text-2xs sm:text-xs text-slate-200 transition flex justify-between items-center leading-relaxed shadow-lg shadow-teal-500/10";
+        const vocabWordSolvedClass = "vocab-word-btn w-full p-4 text-left bg-emerald-950/40 border-2 border-emerald-500/50 rounded-xl text-xs sm:text-sm font-bold text-emerald-400 cursor-default flex justify-between items-center";
+        const vocabMeaningSolvedClass = "vocab-meaning-btn w-full p-4 text-left bg-emerald-950/40 border-2 border-emerald-500/50 rounded-xl text-2xs sm:text-xs text-emerald-400 cursor-default flex justify-between items-center leading-relaxed";
+
+        const saveStage1PhaseUnlocks = () => {
+            if (unlockedLevels[1]) localStorage.setItem('stage1_phase2_unlocked', 'true');
+            if (unlockedLevels[2]) localStorage.setItem('stage1_phase3_unlocked', 'true');
+        };
+
+        const completeStage1 = () => {
+            unlockedLevels = [true, true, true];
+            saveStage1PhaseUnlocks();
+            localStorage.setItem('stage1_cleared', 'true');
+        };
 
         // Custom Wave Synthesizer utilizing Web Audio API safely
         const playAestheticSound = (nature) => {
@@ -634,7 +607,7 @@
         const selectLevel = (lvlIndex) => {
             if (lvlIndex > 0 && !unlockedLevels[lvlIndex]) {
                 playAestheticSound('wrong');
-                triggerDialogPopup("ด่านนี้ยังไม่เปิดเผย", "คุณต้องพิชิตสัมผัสกวีในด่านที่ผ่านมาให้ครบถ้วนก่อน เพื่อชำระพละกำลังขัดเกลาฝีมือกวีธรรมดา!", "🔒");
+                triggerDialogPopup("เฟสนี้ยังไม่เปิดเผย", "คุณต้องผ่านเฟสก่อนหน้าให้ครบถ้วนก่อน จึงจะปลดล็อกการฝึกเฟสถัดไปได้", "🔒");
                 return;
             }
 
@@ -694,11 +667,15 @@
             } else {
                 unplacedPool.forEach(card => {
                     const btn = document.createElement('div');
-                    btn.className = "p-3 sm:p-4 bg-slate-800/80 hover:bg-slate-700 hover:border-cyan-400 border border-slate-700/60 rounded-xl cursor-pointer text-xs sm:text-sm text-slate-100 font-medium transition duration-200 shadow-md flex justify-between items-center group transform hover:-translate-x-1";
+                    btn.className = poetryCardClass;
+                    btn.draggable = true;
+                    btn.dataset.cardId = card.id;
                     btn.onclick = () => selectCardIntoSlot(card);
+                    btn.ondragstart = (event) => onPoetryDragStart(event, card);
+                    btn.ondragend = () => btn.classList.remove('opacity-50');
                     btn.innerHTML = `
                         <span class="truncate">${card.text}</span>
-                        <span class="text-3xs font-extrabold text-cyan-500/50 group-hover:text-cyan-400 transition ml-2 whitespace-nowrap"><i class="fa-solid fa-plus-circle"></i> ส่งเข้าช่อง</span>
+                        <span class="text-3xs font-extrabold text-cyan-500/50 group-hover:text-cyan-400 transition ml-2 whitespace-nowrap"><i class="fa-solid fa-grip-lines"></i> ลากวาง</span>
                     `;
                     deckContainer.appendChild(btn);
                 });
@@ -712,6 +689,14 @@
                 const hintText = slotElem.querySelector('.rhyme-hint');
 
                 hintText.textContent = `แนะช่วย: ${currentLevelData.hints[i]}`;
+                slotElem.ondragover = (event) => {
+                    event.preventDefault();
+                    slotElem.classList.add('border-cyan-300', 'bg-cyan-950/50');
+                };
+                slotElem.ondragleave = () => {
+                    slotElem.classList.remove('border-cyan-300', 'bg-cyan-950/50');
+                };
+                slotElem.ondrop = (event) => onPoetryDrop(event, i);
 
                 if (userSlots[i] !== null) {
                     slotTextElem.textContent = userSlots[i].text;
@@ -729,6 +714,30 @@
                     labelElem.innerHTML = `<i class="fa-solid fa-circle-dot opacity-40"></i> ยังว่างอยู่ - ${labelsText[i]}`;
                 }
             }
+        };
+
+        const onPoetryDragStart = (event, card) => {
+            playAestheticSound('select');
+            event.currentTarget.classList.add('opacity-50');
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', String(card.id));
+            event.dataTransfer.setData('application/x-poetry-card-id', String(card.id));
+        };
+
+        const onPoetryDrop = (event, slotIndex) => {
+            event.preventDefault();
+            event.stopPropagation();
+            const slotElem = document.getElementById(`slot-${slotIndex}`);
+            slotElem.classList.remove('border-cyan-300', 'bg-cyan-950/50');
+
+            const cardId = Number(event.dataTransfer.getData('application/x-poetry-card-id') || event.dataTransfer.getData('text/plain'));
+            const droppedCard = activeShuffledDeck.find(card => card.id === cardId);
+            if (!droppedCard) return;
+
+            userSlots[slotIndex] = droppedCard;
+            playAestheticSound('select');
+            renderGameLayout();
+            updateTideProtectionLevel();
         };
 
         const selectCardIntoSlot = (card) => {
@@ -828,6 +837,7 @@
                 // Unlock next stage if exists
                 if (currentLevelIndex < 2) {
                     unlockedLevels[currentLevelIndex + 1] = true;
+                    saveStage1PhaseUnlocks();
                     updateStageSelectorUI();
                     
                     triggerDialogPopup(
@@ -843,7 +853,7 @@
                     // All stages finished -> proceed to Vocabulary game
                     triggerDialogPopup(
                         "ประพันธ์เกราะกลอนเสร็จสมบูรณ์!", 
-                        "สุดยอดฝีมือ! คุณเรียงต่อสัมผัสบทร้อยกรองของนางอสุรีผีเสื้อสมุทรได้ถูกต้องครบถ้วนหมดทั้ง ๓ ด่านการเรียนรู้ <br><br><strong>ด่านท้าทายพิเศษ: เข้าทดสอบมินิเกมคำศัพท์สัตว์วรรณคดี เพื่อประเมินดาวคุณวุฒิสูงสุด</strong>", 
+                        "สุดยอดฝีมือ! คุณเรียงต่อสัมผัสบทร้อยกรองของนางอสุรีผีเสื้อสมุทรได้ถูกต้องครบถ้วนทั้ง ๓ เฟส <br><br><strong>ไปต่อเฟสสรุปคำศัพท์สัตว์วรรณคดี เพื่อจบด่านและปลดล็อกด่านที่ 2</strong>", 
                         "👑",
                         () => {
                             closeDialog();
@@ -877,7 +887,7 @@
                     
                     btn.className = "w-full mt-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs hover:bg-cyan-400 transition";
                     btn.removeAttribute('disabled');
-                    btn.textContent = `เข้าผจญภัยด่าน ${i + 1}`;
+                    btn.textContent = `เริ่มเฟส ${i + 1}`;
                 }
             }
         };
@@ -903,34 +913,71 @@
 
             listWords.forEach(element => {
                 const button = document.createElement('button');
-                button.className = "vocab-word-btn w-full p-4 text-left bg-slate-850 hover:bg-slate-800 hover:border-cyan-400 border border-slate-700/60 rounded-xl text-xs sm:text-sm font-bold text-cyan-200 transition flex justify-between items-center";
+                button.className = vocabWordBaseClass;
+                button.draggable = true;
                 button.dataset.word = element.word;
                 button.onclick = () => onVocabWordSelected(button, element.word);
-                button.innerHTML = `<span>${element.word}</span> <i class="fa-solid fa-chevron-right text-3xs text-slate-500"></i>`;
+                button.ondragstart = (event) => onVocabDragStart(event, button, element.word);
+                button.ondragend = () => button.classList.remove('opacity-50');
+                button.innerHTML = `<span>${element.word}</span> <i class="fa-solid fa-grip-lines text-3xs text-slate-500"></i>`;
                 wordsCol.appendChild(button);
             });
 
             listMeanings.forEach(element => {
                 const button = document.createElement('button');
-                button.className = "vocab-meaning-btn w-full p-4 text-left bg-slate-850 hover:bg-slate-800 border border-slate-700/60 rounded-xl text-2xs sm:text-xs text-slate-300 transition flex justify-between items-center leading-relaxed";
+                button.className = vocabMeaningBaseClass;
                 button.dataset.meaning = element.meaning;
                 button.onclick = () => onVocabMeaningSelected(button, element.meaning);
-                button.innerHTML = `<span>${element.meaning}</span> <i class="fa-solid fa-chevron-left text-3xs text-slate-500"></i>`;
+                button.ondragover = (event) => onVocabMeaningDragOver(event, button);
+                button.ondragleave = () => button.classList.remove('border-teal-300', 'bg-teal-950/30');
+                button.ondrop = (event) => onVocabDrop(event, button, element.meaning);
+                button.innerHTML = `<span>${element.meaning}</span> <i class="fa-solid fa-bullseye text-3xs text-slate-500"></i>`;
                 meaningsCol.appendChild(button);
             });
+        };
+
+        const onVocabDragStart = (event, btn, word) => {
+            if (btn.classList.contains('bg-emerald-950/40')) {
+                event.preventDefault();
+                return;
+            }
+            playAestheticSound('select');
+            btn.classList.add('opacity-50');
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', word);
+            event.dataTransfer.setData('application/x-vocab-word', word);
+        };
+
+        const onVocabMeaningDragOver = (event, btn) => {
+            if (btn.classList.contains('bg-emerald-950/40')) return;
+            event.preventDefault();
+            btn.classList.add('border-teal-300', 'bg-teal-950/30');
+        };
+
+        const onVocabDrop = (event, meaningBtn, meaning) => {
+            event.preventDefault();
+            event.stopPropagation();
+            meaningBtn.classList.remove('border-teal-300', 'bg-teal-950/30');
+            const word = event.dataTransfer.getData('application/x-vocab-word') || event.dataTransfer.getData('text/plain');
+            const wordBtn = [...document.querySelectorAll('.vocab-word-btn')].find(btn => btn.dataset.word === word);
+            if (!word || !wordBtn) return;
+
+            selectedVocabWord = { elem: wordBtn, val: word };
+            selectedVocabMeaning = { elem: meaningBtn, val: meaning };
+            evaluateVocabMatching();
         };
 
         const onVocabWordSelected = (btn, value) => {
             playAestheticSound('select');
             document.querySelectorAll('.vocab-word-btn').forEach(b => {
                 if (!b.classList.contains('bg-emerald-950/40')) {
-                    b.className = "vocab-word-btn w-full p-4 text-left bg-slate-855 hover:bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm font-bold text-cyan-200 transition flex justify-between items-center";
+                    b.className = vocabWordBaseClass;
                 }
             });
 
             if (btn.classList.contains('bg-emerald-950/40')) return;
 
-            btn.className = "vocab-word-btn w-full p-4 text-left bg-cyan-500/20 border-2 border-cyan-400 rounded-xl text-xs sm:text-sm font-bold text-cyan-300 transition flex justify-between items-center shadow-lg shadow-cyan-500/10";
+            btn.className = vocabWordSelectedClass;
             selectedVocabWord = { elem: btn, val: value };
             evaluateVocabMatching();
         };
@@ -939,13 +986,13 @@
             playAestheticSound('select');
             document.querySelectorAll('.vocab-meaning-btn').forEach(b => {
                 if (!b.classList.contains('bg-emerald-950/40')) {
-                    b.className = "vocab-meaning-btn w-full p-4 text-left bg-slate-855 hover:bg-slate-800 border border-slate-700 rounded-xl text-2xs sm:text-xs text-slate-300 transition flex justify-between items-center leading-relaxed";
+                    b.className = vocabMeaningBaseClass;
                 }
             });
 
             if (btn.classList.contains('bg-emerald-950/40')) return;
 
-            btn.className = "vocab-meaning-btn w-full p-4 text-left bg-teal-500/20 border-2 border-teal-400 rounded-xl text-2xs sm:text-xs text-slate-200 transition flex justify-between items-center leading-relaxed shadow-lg shadow-teal-500/10";
+            btn.className = vocabMeaningSelectedClass;
             selectedVocabMeaning = { elem: btn, val: value };
             evaluateVocabMatching();
         };
@@ -956,10 +1003,11 @@
 
                 if (correctMatch) {
                     playAestheticSound('correct');
-                    selectedVocabWord.elem.className = "vocab-word-btn w-full p-4 text-left bg-emerald-950/40 border-2 border-emerald-500/50 rounded-xl text-xs sm:text-sm font-bold text-emerald-400 cursor-default flex justify-between items-center";
+                    selectedVocabWord.elem.className = vocabWordSolvedClass;
+                    selectedVocabWord.elem.draggable = false;
                     selectedVocabWord.elem.innerHTML = `<span>${selectedVocabWord.val}</span> <i class="fa-solid fa-check-circle text-emerald-400"></i>`;
                     
-                    selectedVocabMeaning.elem.className = "vocab-meaning-btn w-full p-4 text-left bg-emerald-950/40 border-2 border-emerald-500/50 rounded-xl text-2xs sm:text-xs text-emerald-400 cursor-default flex justify-between items-center leading-relaxed";
+                    selectedVocabMeaning.elem.className = vocabMeaningSolvedClass;
                     selectedVocabMeaning.elem.innerHTML = `<span>${selectedVocabMeaning.val}</span> <i class="fa-solid fa-check-circle text-emerald-400"></i>`;
 
                     solvedVocabCount++;
@@ -972,7 +1020,7 @@
                         setTimeout(() => {
                             triggerDialogPopup(
                                 "พจนานุกรมกวีสัมฤทธิผลครบถ้วน!", 
-                                "เยี่ยมมาก! ท่านจับคู่ความหมายอักษรกลอนของนางผีเสื้อสมุทรได้รวดเร็ว ครบถ้วน ได้รับคะแนนดาวเกียรติยศสูงสุดสำเร็จ", 
+                "เยี่ยมมาก! คุณจับคู่ความหมายอักษรกลอนของนางผีเสื้อสมุทรได้ครบถ้วน ระบบจะบันทึกผ่านด่านที่ 1 และปลดล็อกด่านที่ 2 ให้ทันที", 
                                 "🏆",
                                 () => {
                                     closeDialog();
@@ -990,8 +1038,8 @@
                     mean.classList.add('border-red-500', 'bg-red-500/20');
 
                     setTimeout(() => {
-                        word.className = "vocab-word-btn w-full p-4 text-left bg-slate-850 hover:bg-slate-800 border border-slate-700 rounded-xl text-xs sm:text-sm font-bold text-cyan-200 transition flex justify-between items-center";
-                        mean.className = "vocab-meaning-btn w-full p-4 text-left bg-slate-850 hover:bg-slate-800 border border-slate-700 rounded-xl text-2xs sm:text-xs text-slate-300 transition flex justify-between items-center leading-relaxed";
+                        if (!word.classList.contains('bg-emerald-950/40')) word.className = vocabWordBaseClass;
+                        if (!mean.classList.contains('bg-emerald-950/40')) mean.className = vocabMeaningBaseClass;
                     }, 800);
 
                     selectedVocabWord = null;
@@ -1012,16 +1060,8 @@
             document.getElementById('final-vocab-score').textContent = `${solvedVocabCount} / 5 คำแปล`;
             document.getElementById('final-time-spend').textContent = totalTimeStr;
 
-            // Name update inside certificate
-            const nameInput = document.getElementById('player-name').value.trim();
-            const checkedName = nameInput || "กวีน้อยนิรนามผู้พิทักษ์";
-            document.getElementById('cert-player-name').textContent = `- ${checkedName} -`;
-
-            // Auto format dates for certificate
-            const today = new Date();
-            const thaiOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-            const formattedDateStr = today.toLocaleDateString('th-TH', thaiOptions);
-            document.getElementById('cert-formatted-date').textContent = formattedDateStr;
+            completeStage1();
+            updateStageSelectorUI();
 
             showScreen('screen-score');
             playAestheticSound('level-clear');
@@ -1037,7 +1077,7 @@
             secondsPassed = 0;
             wrongAttemptsGlobalCount = 0;
             document.getElementById('wrong-attempts-count').textContent = "0 ครั้ง";
-            unlockedLevels = [true, false, false];
+            unlockedLevels = localStorage.getItem('stage1_cleared') === 'true' ? [true, true, true] : [true, false, false];
             updateStageSelectorUI();
             showScreen('screen-start');
         };
@@ -1153,6 +1193,17 @@
         window.onload = function() {
             initOceanEnvironment();
         };
+		
+		function onStage1Win() {
+			// บันทึกสถานะว่าด่านที่ 1 ผ่านเรียบร้อยแล้วลงใน LocalStorage
+			localStorage.setItem('stage1_cleared', 'true');
+			
+			// แจ้งเตือนผู้เล่นหรือแสดงป๊อปอัพยินดีด้วย
+			alert("ยินดีด้วย! คุณไขรหัสฉันทลักษณ์สยบนางผีเสื้อสมุทรสำเร็จ และปลดล็อกด่านถัดไปแล้ว!");
+			
+			// ย้ายหน้ากลับมายังหน้าหลักระบบ
+			window.location.href = "Index.html";
+		}
     </script>
 </body>
 </html>

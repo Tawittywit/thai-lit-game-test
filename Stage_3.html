@@ -1,25 +1,56 @@
 <!DOCTYPE html>
-<html lang="th" class="h-full">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ด่านที่ 3: กระจกเงาตีบท</title>
+    <title>ด่านที่ 3: นาฏเงาแก้วพิสดาร</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Sarabun & Kanit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #0f172a;
+            background-image: radial-gradient(circle at top, #1e1b4b 0%, #0f0f17 100%);
+            touch-action: manipulation;
+        }
+        .header-font {
             font-family: 'Kanit', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
         }
-        .thai-gold-text {
-            background: linear-gradient(to right, #ffe259, #ffa751);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* ลายไทยขอบทองตกแต่ง */
+        .thai-border {
+            position: relative;
         }
+        .thai-border::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 2px solid #d97706;
+            border-radius: 0.5rem;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+        .thai-pattern {
+            background-image: radial-gradient(circle at 1px 1px, rgba(217, 119, 6, 0.15) 1px, transparent 0);
+            background-size: 16px 16px;
+        }
+        /* แอนิเมชันสำหรับบัตรจับคู่ */
+        .card-glow-selected {
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.6);
+            border-color: #eab308 !important;
+            transform: scale(1.02);
+        }
+        .card-glow-matched {
+            box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+            border-color: #22c55e !important;
+            opacity: 0.85;
+        }
+    
         /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -41,40 +72,190 @@
         }
     </style>
 </head>
-<body class="text-slate-100 min-h-full flex flex-col overflow-x-hidden">
+<body class="min-h-screen text-slate-100 flex flex-col overflow-x-hidden relative">
 
-    <header class="border-b border-indigo-900/50 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50 px-4 py-3">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
+    <!-- CANVAS สำหรับวาดเส้นโยงใยของเฟสที่ 1 -->
+    <canvas id="connectionCanvas" class="absolute top-0 left-0 w-full h-full pointer-events-none z-10"></canvas>
+
+    <header class="w-full bg-slate-900/80 border-b border-amber-500/20 py-4 px-6 backdrop-blur-md sticky top-0 z-30">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <div class="bg-gradient-to-tr from-amber-400 to-yellow-600 p-2 rounded-xl text-slate-950 font-black shadow-lg">
-                    <i class="fa-solid fa-camera-retro text-xl"></i>
+                <div class="bg-amber-600/20 p-2 rounded-full border border-amber-500/30">
+                    <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
+                    </svg>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg md:text-xl tracking-wide text-amber-400">เกมเรียงกลอนพระอภัยมณี</h1>
-                    <p class="text-xs text-slate-400 hidden sm:block">ด่านที่ 3: กระจกเงาตีบท</p>
+                    <h1 class="header-font text-2xl font-bold text-amber-400 tracking-wide">วรรณคดีไทยเกมวิทยาทัศน์</h1>
+                    <p class="text-xs text-slate-400">ด่านที่ 3: นาฏเงาแก้วพิสดาร • 2 เฟสการเรียนรู้</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2 md:gap-4 text-xs md:text-sm">
-                <div class="px-3 py-1.5 rounded-full font-semibold transition-all duration-300 bg-slate-800 text-slate-500">
-                    <span class="hidden sm:inline">ด่าน 1: </span>ตะลุยด่าน
-                </div>
+            <div class="flex flex-wrap items-center justify-end gap-2 text-xs md:text-sm">
+                <a href="Index.html" class="px-3 py-1.5 rounded-full bg-slate-800 hover:bg-slate-700 border border-amber-500/30 text-amber-300 font-semibold transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-house"></i>
+                    <span class="hidden sm:inline">กลับหน้าหลัก</span>
+                </a>
+                <button type="button" id="crumbPhase1" onclick="goToPhase(1)" class="px-3 py-1.5 rounded-full font-semibold transition-all duration-300 border"></button>
                 <i class="fa-solid fa-chevron-right text-slate-600 text-xs"></i>
-                <div class="px-3 py-1.5 rounded-full font-semibold transition-all duration-300 bg-slate-800 text-slate-500">
-                    <span class="hidden sm:inline">ด่าน 2: </span>มหาศึกเสียงปี่
-                </div>
-                <i class="fa-solid fa-chevron-right text-slate-600 text-xs"></i>
-                <div class="px-3 py-1.5 rounded-full font-semibold transition-all duration-300 bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                    <span class="hidden sm:inline">ด่าน 3: </span>กระจกเงาตีบท
-                </div>
+                <button type="button" id="crumbPhase2" onclick="goToPhase(2)" class="px-3 py-1.5 rounded-full font-semibold transition-all duration-300 border"></button>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-6xl w-full mx-auto p-4 md:p-6 flex flex-col items-center justify-center">
-        
-        <div class="w-full bg-indigo-950/40 border border-indigo-900/60 p-4 md:p-6 rounded-2xl flex flex-col md:flex-row gap-4 justify-between items-center mb-6 max-w-5xl">
+    <main class="flex-grow w-full relative z-20">
+
+        <!-- ============ เฟสที่ 1: จับคู่ภาษาท่ากับบทกลอน ============ -->
+        <div id="phase1View" class="max-w-6xl w-full mx-auto p-4 md:p-6 flex flex-col justify-center">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-3 mb-5 bg-slate-900/60 border border-amber-500/10 rounded-xl px-4 py-3">
+            <div class="text-center md:text-left">
+                <h2 class="header-font text-lg font-bold text-amber-300">🎭 เฟสที่ 1: จับคู่ภาษาท่ากับบทกลอน</h2>
+                <p class="text-xs text-slate-400">วิเคราะห์ลีลานาฏศิลป์ให้ตรงกับบทประพันธ์วรรณคดีไทย</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="bg-slate-800/80 px-4 py-2 rounded-lg border border-slate-700 text-center min-w-[110px]">
+                    <span class="text-xs block text-slate-400">คะแนนสะสม</span>
+                    <span id="scoreBadge" class="text-xl font-bold text-amber-300">0 / 5</span>
+                </div>
+                <button id="btnRules" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold px-4 py-2 rounded-lg transition text-sm">
+                    วิธีเล่น
+                </button>
+            </div>
+        </div>
+            <!-- แถบแจ้งเตือนสเตตัส -->
+        <div id="statusAlert" class="mb-4 text-center py-2 px-4 rounded-lg bg-slate-800/50 border border-slate-700 text-amber-200 text-sm hidden transition-all duration-300">
+            คำแนะนำ: เลือกภาษาท่าฝั่งซ้าย แล้วเลือกวรรณคดีที่ตรงกันฝั่งขวา
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            
+            <!-- ฝั่งซ้าย: ภาษาท่า (Visual / SVG) -->
+            <div class="lg:col-span-5 flex flex-col gap-4">
+                <div class="header-font text-lg font-semibold text-amber-200 border-b border-amber-500/20 pb-2 px-1 flex justify-between items-center">
+                    <span>🎭 ฝั่งภาษาท่า (นาฏยนิยาม)</span>
+                    <span class="text-xs font-normal text-slate-400">เลือกภาพท่ารำ</span>
+                </div>
+                <div class="grid grid-cols-1 gap-4" id="gestureColumn">
+                    <!-- จะสุ่มขึ้นมาด้วย JavaScript -->
+                </div>
+            </div>
+
+            <!-- ตรงกลาง: ตัวบอกสถานะทางเลือกมือถือ (สำหรับหน้าจอเล็ก) -->
+            <div class="lg:col-span-2 flex flex-col justify-center items-center">
+                <div class="hidden lg:flex flex-col items-center justify-center gap-2 h-full opacity-30">
+                    <div class="w-1 h-12 bg-gradient-to-b from-amber-500 to-transparent"></div>
+                    <span class="header-font text-xs text-amber-400 uppercase tracking-widest text-center writing-mode-vertical">จับคู่สัมพันธ์</span>
+                    <div class="w-1 h-12 bg-gradient-to-t from-amber-500 to-transparent"></div>
+                </div>
+            </div>
+
+            <!-- ฝั่งขวา: บทกลอน / อารมณ์ (Analytical) -->
+            <div class="lg:col-span-5 flex flex-col gap-4">
+                <div class="header-font text-lg font-semibold text-amber-200 border-b border-amber-500/20 pb-2 px-1 flex justify-between items-center">
+                    <span>📜 ฝั่งคำวิเคราะห์ / กลอนวรรณคดี</span>
+                    <span class="text-xs font-normal text-slate-400">เลือกความหมายที่คู่กัน</span>
+                </div>
+                <div class="grid grid-cols-1 gap-4" id="poemColumn">
+                    <!-- จะสุ่มขึ้นมาด้วย JavaScript -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ปุ่มควบคุมด้านล่าง -->
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+            <button id="btnCheck" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-3 rounded-xl shadow-lg shadow-emerald-900/20 transition-all text-base border border-emerald-400/30 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                ตรวจสอบคำตอบ
+            </button>
+            <button id="btnHint" class="bg-indigo-900/60 hover:bg-indigo-900 text-indigo-200 font-medium px-6 py-3 rounded-xl transition border border-indigo-500/30 flex items-center gap-2">
+                <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                คำใบ้ช่วยคิด
+            </button>
+            <button id="btnReset" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium px-6 py-3 rounded-xl transition border border-slate-700 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 12H16M6 8l4-4M6 8L2 12"></path></svg>
+                เริ่มเล่นใหม่
+            </button>
+        </div>
+
+            <div id="rulesModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-slate-900 border-2 border-amber-500 rounded-2xl max-w-lg w-full p-6 relative thai-pattern">
+            <h3 class="header-font text-2xl font-bold text-amber-400 mb-4 text-center border-b border-amber-500/20 pb-2">📖 วิธีการเล่นและวิเคราะห์</h3>
+            <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+                <p class="font-semibold text-amber-300">"ภาษาท่า" คือภาษาทางนาฏศิลป์ที่ใช้ท่าทางแทนคำพูดและอารมณ์ความรู้สึก</p>
+                <ol class="list-decimal list-inside space-y-2 text-slate-300">
+                    <li>สังเกตท่าทางของตัวละครในฝั่งซ้าย (แขน, มือ, ลำตัว, ใบหน้า) เพื่อจำแนกความรู้สึก</li>
+                    <li>อ่านและวิเคราะห์วรรณคดีไทยในฝั่งขวา สังเกต "คำกุญแจ" (Keywords) ที่ระบุถึงอารมณ์</li>
+                    <li><strong class="text-amber-400">คลิกที่ป้ายภาษาท่าฝั่งซ้าย</strong> แล้ว <strong class="text-amber-400">คลิกที่ป้ายบทกลอนฝั่งขวา</strong> เพื่อลากเส้นเชื่อมโยงคู่</li>
+                    <li>เมื่อเชื่อมครบแล้ว กดปุ่ม <strong class="text-emerald-400">"ตรวจสอบคำตอบ"</strong> เพื่อตรวจความถูกต้องและอ่านวิเคราะห์โดยละเอียด</li>
+                </ol>
+                <div class="bg-amber-950/40 p-3 rounded-lg border border-amber-800/40 text-xs text-amber-200">
+                    💡 <strong class="text-amber-400">เน้นการคิดวิเคราะห์:</strong> อย่ามองเพียงแค่ชื่อท่า แต่จงวิเคราะห์การตีความอารมณ์จากบทประพันธ์ในราชสำนัก!
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <button id="closeRulesBtn" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold px-6 py-2 rounded-lg transition-all w-full">
+                    เข้าใจแล้ว เข้าสู่บทเรียน
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ผลลัพธ์และวิเคราะห์เฉลย -->
+    <div id="resultModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 hidden overflow-y-auto">
+        <div class="bg-slate-900 border-2 border-amber-500 rounded-2xl max-w-3xl w-full p-6 my-8 relative thai-pattern">
+            <div class="text-center mb-6">
+                <div class="inline-block p-4 bg-amber-500/10 rounded-full border border-amber-400/20 mb-3" id="resultIcon">
+                    <!-- ไอคอนผลลัพธ์ -->
+                </div>
+                <h3 class="header-font text-3xl font-bold text-amber-400" id="resultTitle">วิเคราะห์คะแนนของคุณ</h3>
+                <p class="text-slate-400 text-sm mt-1" id="resultSubtitle">มาตรวจผลประเมินเชิงวิเคราะห์กันเถอะ</p>
+                <div class="text-5xl font-bold text-amber-300 mt-4" id="finalScoreDisplay">0 / 5</div>
+            </div>
+
+            <!-- ส่วนสรุปวิเคราะห์ -->
+            <div class="space-y-4 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar" id="analysisContainer">
+                <!-- รายการแสดงเฉลยจะมาโผล่ตรงนี้ -->
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button id="btnRetryModal" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-6 py-3 rounded-xl transition border border-slate-700">
+                    ลองเล่นใหม่อีกครั้ง
+                </button>
+                <button id="btnCloseResult" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold px-6 py-3 rounded-xl transition-all">
+                    ปิดหน้าต่างเฉลย
+                </button>
+            </div>
+            <div id="btnGoPhase2Wrap" class="hidden mt-4">
+                <button id="btnGoPhase2" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2">
+                    ไปต่อเฟสที่ 2: กระจกเงาตีบทท่ารำ <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: คำใบ้ช่วยคิด -->
+    <div id="hintModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-slate-900 border-2 border-indigo-500 rounded-2xl max-w-md w-full p-6 relative">
+            <h3 class="header-font text-xl font-bold text-indigo-400 mb-3 flex items-center gap-2">
+                💡 คำใบ้ประลองปัญญา
+            </h3>
+            <p id="hintContent" class="text-sm text-slate-300 leading-relaxed bg-slate-950/60 p-4 rounded-lg border border-slate-800">
+                (เลือกแผ่นป้ายเพื่อดูคำใบ้วิเคราะห์)
+            </p>
+            <div class="mt-4 text-center">
+                <button id="closeHintBtn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-2 rounded-lg transition-all w-full text-sm">
+                    กลับสู่เกม
+                </button>
+            </div>
+        </div>
+    </div>
+        </div>
+
+        <!-- ============ เฟสที่ 2: กระจกเงาตีบทท่ารำ ============ -->
+        <div id="phase2View" class="hidden max-w-6xl w-full mx-auto p-4 md:p-6 flex flex-col items-center justify-center">
+            <div class="w-full bg-indigo-950/40 border border-indigo-900/60 p-4 md:p-6 rounded-2xl flex flex-col md:flex-row gap-4 justify-between items-center mb-6 max-w-5xl">
             <div class="space-y-1 text-center md:text-left">
-                <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">Stage 3: The Mirror of Expressions</span>
+                <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">เฟสที่ 2 • The Mirror of Expressions</span>
                 <h3 class="text-2xl font-bold">กระจกเงาตีบท</h3>
                 <p class="text-sm text-slate-300 mt-1">จงแสดงภาษาท่าทางให้ถูกต้องตามลำดับ ค้างไว้จนหลอดพลังเต็ม เพื่อปลดล็อกพลังร่ายรำ!</p>
             </div>
@@ -136,17 +317,713 @@
                         <i class="fa-solid fa-circle-info"></i> สถานะ: รอการเปิดกล้อง...
                     </div>
 
+                    <div id="phase2CompleteBanner" class="hidden text-center p-5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 space-y-3">
+                        <p class="text-emerald-300 font-bold text-lg"><i class="fa-solid fa-trophy"></i> ยอดเยี่ยม! คุณผ่านครบทั้ง 2 เฟสของด่านที่ 3 แล้ว</p>
+                        <p class="text-sm text-slate-300">ระบบบันทึกสถานะผ่านด่านที่ 3 เรียบร้อยแล้ว กลับหน้าหลักเพื่อดูความคืบหน้า 3/3 ด่านได้เลย</p>
+                        <div class="flex flex-wrap justify-center gap-3 pt-1">
+                            <button type="button" onclick="goToPhase(1)" class="bg-slate-800 hover:bg-slate-700 text-amber-300 font-semibold px-5 py-2.5 rounded-xl border border-amber-500/30 transition">← ย้อนกลับไปเฟสที่ 1</button>
+                            <button type="button" onclick="window.location.href='Index.html'" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold px-5 py-2.5 rounded-xl transition">กลับหน้าหลัก</button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
+        </div>
+
     </main>
+
+    <footer class="w-full bg-slate-950/80 border-t border-slate-900 text-center py-4 text-xs text-slate-500 relative z-20">
+        © ๒๕๖๙ วรรณคดีไทยเกมวิทยาทัศน์ — ด่านที่ 3: นาฏเงาแก้วพิสดาร
+    </footer>
+
+    <script>
+        // สร้างระบบเสียงสังเคราะห์เบื้องต้น เพื่อความลื่นไหลไม่ต้องโหลดไฟล์เสียงภายนอก
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSound(type) {
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'select') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(440, audioCtx.currentTime); // A4
+                    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.12);
+                } else if (type === 'connect') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08); // E5
+                    osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.16); // G5
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                } else if (type === 'success') {
+                    // เสียงพัดขึ้นเมื่อผ่านสำเร็จทั้งหมด
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.4);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.45);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.45);
+                } else if (type === 'error') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(80, audioCtx.currentTime + 0.25);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.28);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.28);
+                }
+            } catch(e) {
+                console.log("Audio not supported or blocked");
+            }
+        }
+    </script>
+
+    <script>
+        // ----- ระบบสลับเฟสของบทเรียน -----
+        let currentPhase = 1;
+        let phase2Unlocked = false;
+
+        function renderBreadcrumb() {
+            const c1 = document.getElementById("crumbPhase1");
+            const c2 = document.getElementById("crumbPhase2");
+
+            c1.innerHTML = "เฟส 1: จับคู่ภาษาท่า";
+            c1.className = "px-3 py-1.5 rounded-full font-semibold transition-all duration-300 border " +
+                (currentPhase === 1
+                    ? "bg-amber-500/20 text-amber-300 border-amber-500/30"
+                    : "bg-slate-800 hover:bg-slate-700 text-slate-400 border-transparent");
+
+            if (!phase2Unlocked) {
+                c2.innerHTML = '<i class="fa-solid fa-lock text-[10px] mr-1"></i>เฟส 2: กระจกเงาตีบทท่ารำ';
+                c2.className = "px-3 py-1.5 rounded-full font-semibold transition-all duration-300 border border-transparent bg-slate-800/60 text-slate-600 cursor-not-allowed";
+            } else {
+                c2.innerHTML = '<i class="fa-solid fa-unlock text-[10px] mr-1"></i>เฟส 2: กระจกเงาตีบทท่ารำ';
+                c2.className = "px-3 py-1.5 rounded-full font-semibold transition-all duration-300 border " +
+                    (currentPhase === 2
+                        ? "bg-amber-500/20 text-amber-300 border-amber-500/30"
+                        : "bg-slate-800 hover:bg-slate-700 text-slate-400 border-transparent");
+            }
+        }
+
+        function goToPhase(n) {
+            if (n === 2 && !phase2Unlocked) {
+                showNotification("กรุณาตอบให้ถูกอย่างน้อย 3 ใน 5 ในเฟสที่ 1 ก่อน เพื่อปลดล็อกเฟสที่ 2");
+                return;
+            }
+            currentPhase = n;
+            document.getElementById("phase1View").classList.toggle("hidden", n !== 1);
+            document.getElementById("phase2View").classList.toggle("hidden", n !== 2);
+            renderBreadcrumb();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            if (n === 1) {
+                setTimeout(() => { resizeCanvas(); drawLines(); }, 150);
+            }
+        }
+
+        renderBreadcrumb();
+    </script>
+
+    <script>
+        // ข้อมูลของเกม (เน้นการวิเคราะห์เชิงลึก)
+        const gameData = [
+            {
+                id: "love",
+                gestureName: "ท่ารัก",
+                imageSrc: "ด่าน 3 เฟส 1/ท่ารัก.jpg",
+                gestureDesc: "ประสานมือทั้งสองทาบกันตรงฐานทรวงอก ปลายนิ้วชี้ไปที่ไหล่",
+                hint: "เป็นท่ารำที่สื่อถึงความเสน่หา ผูกพัน และประคองรักษาสัญญาแห่งจิตใจ สังเกตจากมือที่ประสานทับทรวงอกดั่งจะโอบอุ้มหัวใจไว้",
+                analysis: "ในบทกลอนมีคำว่า 'รักสมัครสมาน' ชี้ชัดว่าแม้ดินฟ้ามหาสมุทรจะสูญสิ้นไปตามกาลเวลา แต่จิตวิญญาณแห่งความรักยังคงมั่นคง สอดรับกับท่ารัก (ประสานมือทาบอก) ที่สื่อถึงความภักดีและอารมณ์พึงใจในรักแท้",
+                poem: "ถึงม้วยดินสิ้นฟ้ามหาสมุทร<br>ไม่สิ้นสุดความรักสมัครสมาน<br>แม้เกิดในใต้ฟ้าสุธาธาร<br>ขอพบพานพิศวาสไม่คลาดคลา...",
+                poetSource: "บทอธิษฐานรักของพระอภัยมณี (สุนทรภู่)",
+                emotion: "อารมณ์เสน่หา/ศรัทธาในรัก",
+                svg: `
+                <svg viewBox="0 0 120 120" class="w-20 h-20 md:w-24 md:h-24 mx-auto text-amber-400" fill="none" stroke="currentColor" stroke-width="2">
+                    <!-- ลำตัวและคอ -->
+                    <path d="M60 45 v15 m-20 40 c5 -30 35 -30 40 0" stroke-linecap="round"/>
+                    <!-- ชฎาจำลอง -->
+                    <path d="M50 30 L60 5 L70 30 L65 35 L55 35 Z" fill="rgba(217, 119, 6, 0.2)" stroke="#f59e0b"/>
+                    <!-- ใบหน้าเอียงเล็กน้อย -->
+                    <circle cx="60" cy="38" r="8" fill="#1e1b4b"/>
+                    <!-- ท่ารัก: แขนสองข้างประสานไขว้กันหน้าอก -->
+                    <path d="M35 75 C45 65 52 50 62 55" stroke-linecap="round"/>
+                    <path d="M85 75 C75 65 68 50 58 55" stroke-linecap="round"/>
+                    <!-- หัวใจเล็กๆ สื่อท่ารัก -->
+                    <path d="M60 58 c-2 -2 -5 -2 -5 1 c0 2 5 5 5 5 c0 0 5 -3 5 -5 c0 -3 -3 -3 -5 -1" fill="#ef4444" stroke="#ef4444"/>
+                </svg>`
+            },
+            {
+                id: "anger",
+                gestureName: "ท่าโกรธ",
+                imageSrc: "ด่าน 3 เฟส 1/ท่าโกรธ.jpg",
+                gestureDesc: "ใช้ฝ่ามือข้างหนึ่งถูกับข้างลำคอใต้ใบหู แล้วกระชากลง หากโกรธมากจะกระทืบเท้าสั่น",
+                hint: "ความแค้นเคืองเป็นอารมณ์ร้อนรนที่ปะทุขึ้นมา การกระชากนิ้วลงอย่างกระแทกและเหยียบกระทืบเท้าสะท้อนอารมณ์โทสะรุนแรง",
+                analysis: "กลอนนี้กล่าวถึงอารมณ์ของ 'พระผู้ผ่านไอศูรย์' (พญายักษ์หรือกษัตริย์) ที่มีความแค้น 'พลุ่งพล่าน' จนกระทืบพระบาทเดือดดาล สอดคล้องอย่างสมบูรณ์กับลักษณะนาฏศิลป์ของท่าโกรธ ซึ่งมักจะเริ่มจากการถูกระชากใต้หูแล้วเหยียบกระทืบเท้า",
+                poem: "เมื่อนั้น... พระผู้ผ่านไอศูรย์สูงส่ง<br>ฟังความแค้นพลุ่งพล่านประดังลง<br>กระทืบพระบาทตรงสั่นเทิ้มเทา<br>พลางตวาดโลดแล่นด้วยแสนโกรธ...",
+                poetSource: "รามเกียรติ์ ตอนศึกอสุรพงศ์",
+                emotion: "อารมณ์เคียดแค้น/โทสะ",
+                svg: `
+                <svg viewBox="0 0 120 120" class="w-20 h-20 md:w-24 md:h-24 mx-auto text-amber-400" fill="none" stroke="currentColor" stroke-width="2">
+                    <!-- ลำตัวและคอ -->
+                    <path d="M60 45 v15 m-20 40 c5 -30 35 -30 40 0" stroke-linecap="round"/>
+                    <!-- ชฎายักษ์ (มียอดแหลมมีขยัก) -->
+                    <path d="M50 30 L60 3 L70 30 L60 22 Z" fill="rgba(239, 68, 68, 0.2)" stroke="#ef4444"/>
+                    <!-- ใบหน้ากลมแกว่งหันข้าง -->
+                    <circle cx="60" cy="38" r="8" fill="#1e1b4b"/>
+                    <!-- ท่าโกรธ: มือซ้ายเท้าสะเอว มือขวายกขึ้นข้างหูพร้อมเคลื่อนไหว -->
+                    <path d="M35 85 C30 80 35 70 38 75" stroke-linecap="round"/> <!-- เท้าสะเอว -->
+                    <path d="M70 70 C72 60 76 50 72 42" stroke-linecap="round"/> <!-- ยกขึ้นถูใต้หู -->
+                    <!-- ขีดคลื่นความโกรธข้างหู -->
+                    <path d="M80 40 L85 38 M81 46 L86 45" stroke="#ef4444" stroke-linecap="round"/>
+                </svg>`
+            },
+            {
+                id: "sorrow",
+                gestureName: "ท่าร้องไห้",
+                imageSrc: "ด่าน 3 เฟส 1/ท่าร้องไห้.jpg",
+                gestureDesc: "ประสานมือทั้งสองไขว้กันต่ำตรงหน้าขา ก้มศีรษะลง หรือนำมือหนึ่งซับน้ำตาที่หน้าผาก",
+                hint: "สะท้อนความเหี่ยวแห้งใจ ไร้พลังในการเชิดชูร่างกาย ใบหน้าก้มลงต่ำ และมีอาการสะอึกสะอื้นร่ำไห้จนกายสั่นเทา",
+                analysis: "วิเคราะห์จากคำว่า 'สะอื้นไห้ใจคอจะหลุดหล่น' และ 'น้ำตาร่วงรินไหล' เป็นลักษณะเด่นทางวรรณศิลป์ที่สะท้อนอาการกิริยาโศกสลดอย่างรุนแรง ตรงกับท่ารำโศกเศร้าที่ต้องก้มศีรษะลงต่ำ ประสานมือหงายลงเบื้องล่างด้วยความรู้สึกร่วงโรย",
+                poem: "แสนจะสุดสะอื้นไห้ใจคอหล่น<br>น้ำตาร่วงไหลล้นไม่ขาดสาย<br>เหมือนหนึ่งฟ้าฝ่าลงตรงกลางกาย<br>จะอยู่ไปใยเล่าเจ้าดวงใจ...",
+                poetSource: "เสภาขุนช้างขุนแผน (ตอนสิ้นใจพลายแก้ว)",
+                emotion: "อารมณ์วิปโยค/โศกศัลย์",
+                svg: `
+                <svg viewBox="0 0 120 120" class="w-20 h-20 md:w-24 md:h-24 mx-auto text-amber-400" fill="none" stroke="currentColor" stroke-width="2">
+                    <!-- ลำตัวและคอ (ก้มตัว) -->
+                    <path d="M60 48 v12 m-20 35 c5 -25 35 -25 40 0" stroke-linecap="round"/>
+                    <!-- ชฎาโค้งต่ำลงเล็กน้อย -->
+                    <path d="M48 26 L55 5 L65 26 Z" fill="rgba(217, 119, 6, 0.1)" stroke="#d97706"/>
+                    <!-- ใบหน้าก้มต่ำลง -->
+                    <circle cx="58" cy="35" r="8" fill="#1e1b4b"/>
+                    <!-- ท่าร้องไห้: มือขวายกขึ้นแตะเช็ดน้ำตาบริเวณระดับแก้ม/ดวงตา, มือซ้ายพับรองข้อศอกไว้ -->
+                    <path d="M42 80 C48 78 52 68 54 52" stroke-linecap="round"/> <!-- มือซ้ายแตะศอกขวา -->
+                    <path d="M78 80 C74 72 68 60 58 43" stroke-linecap="round"/> <!-- มือขวาปาดน้ำตา -->
+                    <!-- หยดน้ำตาจำลอง -->
+                    <circle cx="54" cy="45" r="1.5" fill="#38bdf8"/>
+                </svg>`
+            },
+            {
+                id: "reject",
+                gestureName: "ท่าปฏิเสธ",
+                imageSrc: "ด่าน 3 เฟส 1/ท่าปฏิเสธ.jpg",
+				gestureDesc: "การใช้มือข้างใดข้างหนึ่งตั้งวงหน้า (ระดับหน้าอก) แล้วสั่นปลายนิ้วไปมาช้าๆ พร้อมกับส่ายหน้าไปมาเบาๆ เพื่อแสดงอารมณ์",
+				hint: "การยกมือขึ้นตั้งวงด้านหน้าแล้วสั่นปลายนิ้วปัดออก เป็นการแสดงกิริยาบอกปัด สั่งห้าม หรือไม่ยอมรับ พร้อมทั้งเบือนหน้าหลบเพื่อผลักไสสิ่งตรงหน้า",
+				analysis: "วิเคราะห์จากคำว่า 'จะร่วมรักกันอย่างไรในใต้หล้า' ซึ่งเป็นการตัดพ้องอนง้อและบอกปัดความสัมพันธ์อย่างสิ้นเชิง บ่งบอกถึงการปฏิเสธไม่ยอมรับผูกสมัครรักใคร่ สอดรับกับท่ารำที่ต้องตั้งวงหน้าแล้วสั่นปลายนิ้วเพื่อผลักไสและปฏิเสธ",
+				poem: "พี่มนุษย์สุดสวาทเป็นชาติยักษ์<br>จะร่วมรักกันอย่างไรในใต้หล้า<br>จงยับยั้งฟังคำที่พร่ำว่า<br>อย่าโกรธาเลยนะน้องจงตรองดู", // เลือกท่อนที่เน้นคำปฏิเสธชัดเจน
+				poetSource: "นิทานคำกลอนเรื่องพระอภัยมณี - สุนทรภู่",
+				emotion: "อารมณ์ปฏิเสธ/ตัดพ้อ/ห้ามปราม",
+                svg: `
+                <svg viewBox="0 0 120 120" class="w-20 h-20 md:w-24 md:h-24 mx-auto text-amber-400" fill="none" stroke="currentColor" stroke-width="2">
+                    <!-- ลำตัวที่เบี่ยงโค้งเอียงเอว -->
+                    <path d="M57 45 v12 m-22 38 C40 68 62 68 70 95" stroke-linecap="round"/>
+                    <!-- ชฎาเบี่ยงตามทิศทางหัว -->
+                    <path d="M44 26 L56 5 L64 28 Z" fill="rgba(217, 119, 6, 0.1)" stroke="#d97706"/>
+                    <!-- ใบหน้าเอียงแก้มหลบ -->
+                    <circle cx="53" cy="35" r="8" fill="#1e1b4b"/>
+                    <!-- ท่าอาย: มือหนึ่งแนบแก้มเฉียง อีกมือจีบส่งหลัง -->
+                    <path d="M45 42 C44 45 46 38 48 33" stroke-linecap="round"/> <!-- ปลายนิ้วแตะแก้ม -->
+                    <path d="M68 60 C80 65 85 70 82 82" stroke-linecap="round"/> <!-- แขนหลังเอี้ยวอาย -->
+                    <!-- วงแก้มอมชมพูบ่งบอกความอาย -->
+                    <ellipse cx="50" cy="37" rx="2" ry="1" fill="#ec4899" opacity="0.8"/>
+                </svg>`
+            },
+            {
+                id: "joy",
+                gestureName: "ท่ายิ้ม",
+                imageSrc: "ด่าน 3 เฟส 1/ท่ายิ้ม.jpg",
+                gestureDesc: "จีบมือซ้ายหงายขึ้นใกล้บริเวณริมฝีปาก เอียงก้มหัวเล็กน้อย สื่อถึงเสียงหัวร่าร่าเริง",
+                hint: "การจีบมือขึ้นบังริมฝีปากเพื่อแสดงการพยายามพรางเสียงกิริยาหัวเราะยินดีอย่างสุภาพ แต่เปี่ยมด้วยชีวิตชีวาและความสุข",
+                analysis: "บทกลอนนี้ใช้ถ้อยคำเต็มไปด้วยความสุขล้นเหลือ เช่น 'แสนยินดีปรีดาเป็นพ้นพ้น', 'สรวลเสเฮฮาลั่น', และ 'แก้วค่าล้ำวิไลวัลย์' สะท้อนความรู้สึกปรีดาใจสูงสุด จึงเชื่อมโยงกับท่าดีใจ (หรือท่ายิ้ม) ซึ่งแสดงผ่านการจีบพรางบริเวณปากดั่งกิริยาพรางขำอันแยบคาย",
+                poem: "แสนยินดีปรีดาเป็นพ้นพ้น<br>ทั่วทุกหนสรวลเสเฮฮาลั่น<br>ดั่งดวงแก้ววิลาศวิไลวัลย์<br>ที่เฝ้าฝันฟื้นชีพประเสริฐเลิศ...",
+                poetSource: "อิเหนา ตอนประสพสันติสุข",
+                emotion: "อารมณ์สุขล้น/ปีติยินดี",
+                svg: `
+                <svg viewBox="0 0 120 120" class="w-20 h-20 md:w-24 md:h-24 mx-auto text-amber-400" fill="none" stroke="currentColor" stroke-width="2">
+                    <!-- ลำตัวยืดเชิดขึ้นสง่างาม -->
+                    <path d="M60 45 v15 m-20 40 c5 -30 35 -30 40 0" stroke-linecap="round"/>
+                    <!-- ชฎาพริ้วไหวเชิดขึ้น -->
+                    <path d="M50 28 L60 2 L70 28 L60 32 Z" fill="rgba(52, 211, 153, 0.2)" stroke="#34d399"/>
+                    <!-- ใบหน้าแหงนมองโลกแง่ดี -->
+                    <circle cx="60" cy="38" r="8" fill="#1e1b4b"/>
+                    <!-- ท่าดีใจ: มือซ้ายจีบหงายขึ้นระดับปากเพื่อปิดริมฝีปากและหัวเราะร่าเริง อีกมือจีบหลังหรือตั้งวงโปรย -->
+                    <path d="M48 70 C46 58 50 48 55 42" stroke-linecap="round"/> <!-- มือจีบระดับปาก -->
+                    <path d="M72 65 C85 62 82 72 88 80" stroke-linecap="round"/> <!-- มือดีใจตั้งวงส่งท้าย -->
+                    <!-- ประกายวิ้งปรีดา -->
+                    <path d="M72 32 l2 2 m0 -2 l-2 2" stroke="#f59e0b" stroke-width="1.5"/>
+                    <path d="M48 28 l2 2 m0 -2 l-2 2" stroke="#f59e0b" stroke-width="1.5"/>
+                </svg>`
+            }
+        ];
+		
+        // สถานะของเกม
+        let selectedGestureId = null;
+        let selectedPoemId = null;
+        let connections = {}; // บันทึกคู่เชื่อมโยง { gestureId: poemId }
+        let score = 0;
+        let showingHints = false;
+
+        // อ้างอิงอิลิเมนต์ใน DOM
+        const gestureColumn = document.getElementById("gestureColumn");
+        const poemColumn = document.getElementById("poemColumn");
+        const canvas = document.getElementById("connectionCanvas");
+        const ctx = canvas.getContext("2d");
+        const scoreBadge = document.getElementById("scoreBadge");
+        const statusAlert = document.getElementById("statusAlert");
+
+        // โมดอลต่าง ๆ
+        const rulesModal = document.getElementById("rulesModal");
+        const btnRules = document.getElementById("btnRules");
+        const closeRulesBtn = document.getElementById("closeRulesBtn");
+
+        const resultModal = document.getElementById("resultModal");
+        const resultIcon = document.getElementById("resultIcon");
+        const resultTitle = document.getElementById("resultTitle");
+        const resultSubtitle = document.getElementById("resultSubtitle");
+        const finalScoreDisplay = document.getElementById("finalScoreDisplay");
+        const analysisContainer = document.getElementById("analysisContainer");
+        const btnCloseResult = document.getElementById("btnCloseResult");
+        const btnRetryModal = document.getElementById("btnRetryModal");
+
+        const hintModal = document.getElementById("hintModal");
+        const hintContent = document.getElementById("hintContent");
+        const closeHintBtn = document.getElementById("closeHintBtn");
+
+        // ปุ่มควบคุมหลัก
+        const btnCheck = document.getElementById("btnCheck");
+        const btnHint = document.getElementById("btnHint");
+        const btnReset = document.getElementById("btnReset");
+
+        // ฟังก์ชันเริ่มเกมใหม่และทำลาย/สร้างสุ่มป้าย
+        function initGame() {
+            selectedGestureId = null;
+            selectedPoemId = null;
+            connections = {};
+            score = 0;
+            scoreBadge.innerText = `0 / ${gameData.length}`;
+            statusAlert.classList.add("hidden");
+            
+            // ล้างหน้าจอคอลัมน์เดิม
+            gestureColumn.innerHTML = "";
+            poemColumn.innerHTML = "";
+
+            // สุ่มจัดลำดับป้ายซ้ายขวาไม่ให้เรียงตามตัวเฉลยเด็ดขาด
+            const shuffledGestures = [...gameData].sort(() => Math.random() - 0.5);
+            const shuffledPoems = [...gameData].sort(() => Math.random() - 0.5);
+
+            // สร้างป้ายฝั่งซ้าย (ภาษาท่า)
+            shuffledGestures.forEach(item => {
+                const card = document.createElement("div");
+                card.id = `g-${item.id}`;
+                card.className = "bg-slate-900/90 hover:bg-slate-800/80 p-4 rounded-xl border border-amber-500/20 flex items-center gap-4 cursor-pointer transition-all duration-300 relative thai-border group";
+                card.setAttribute("onclick", `selectGesture('${item.id}')`);
+                card.innerHTML = `
+                    <div class="flex-shrink-0 w-24 h-24 md:w-28 md:h-28 bg-slate-950 rounded-lg border border-slate-800 group-hover:border-amber-500/40 transition overflow-hidden">
+                        <img src="${item.imageSrc}" alt="${item.gestureName}" class="w-full h-full object-cover" loading="lazy">
+                    </div>
+                    <div class="flex-grow">
+                        <span class="text-xs bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded border border-amber-500/20 header-font font-medium">ภาษาท่า</span>
+                        <h4 class="header-font text-lg font-bold text-amber-100 mt-1">${item.gestureName}</h4>
+                        <p class="text-xs text-slate-400 mt-0.5 line-clamp-2">${item.gestureDesc}</p>
+                    </div>
+                    <div class="absolute right-3 top-3 w-4 h-4 rounded-full border-2 border-slate-700 flex items-center justify-center bg-slate-950" id="dot-g-${item.id}">
+                        <div class="w-1.5 h-1.5 rounded-full bg-amber-500 scale-0 transition duration-200" id="dot-inner-g-${item.id}"></div>
+                    </div>
+                `;
+                gestureColumn.appendChild(card);
+            });
+
+            // สร้างป้ายฝั่งขวา (บทกลอน/อารมณ์วิเคราะห์)
+            shuffledPoems.forEach(item => {
+                const card = document.createElement("div");
+                card.id = `p-${item.id}`;
+                card.className = "bg-slate-900/90 hover:bg-slate-800/80 p-5 rounded-xl border border-slate-800 cursor-pointer transition-all duration-300 relative group flex flex-col justify-between min-h-[140px]";
+                card.setAttribute("onclick", `selectPoem('${item.id}')`);
+                card.innerHTML = `
+                    <div class="absolute left-3 top-3 w-4 h-4 rounded-full border-2 border-slate-700 flex items-center justify-center bg-slate-950" id="dot-p-${item.id}">
+                        <div class="w-1.5 h-1.5 rounded-full bg-amber-500 scale-0 transition duration-200" id="dot-inner-p-${item.id}"></div>
+                    </div>
+                    <div class="mt-4 mb-3 text-slate-200 italic leading-relaxed text-sm text-center">
+                        "${item.poem}"
+                    </div>
+                    <div class="flex justify-between items-center border-t border-slate-800/60 pt-2 text-xs">
+                        <span class="text-slate-500">${item.poetSource}</span>
+                        <span class="text-amber-500/80 font-bold bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10">${item.emotion}</span>
+                    </div>
+                `;
+                poemColumn.appendChild(card);
+            });
+
+            // รีเซ็ตการวาดเส้น
+            setTimeout(() => {
+                resizeCanvas();
+                drawLines();
+            }, 100);
+        }
+
+        // จัดการคลิกฝั่งภาษาท่า
+        function selectGesture(id) {
+            playSound('select');
+
+            if (selectedGestureId === id && !connections[id]) {
+                selectedGestureId = null;
+                document.getElementById(`g-${id}`)?.classList.remove("card-glow-selected");
+                showNotification("ยกเลิกการเลือกภาษาท่านี้แล้ว");
+                return;
+            }
+            
+            // กรณีลบการเลือกเดิมเมื่อคลิกซ้ำตัวที่ผูกไว้แล้ว
+            if (connections[id]) {
+                delete connections[id];
+                drawLines();
+                updateVisualStates();
+                return;
+            }
+
+            // ถอนความโดดเด่นของอันเก่าที่เคยเลือก
+            if (selectedGestureId) {
+                document.getElementById(`g-${selectedGestureId}`)?.classList.remove("card-glow-selected");
+            }
+
+            selectedGestureId = id;
+            document.getElementById(`g-${id}`)?.classList.add("card-glow-selected");
+
+            showNotification("เยี่ยม! เลือกแผ่นป้ายบทกลอนฝั่งขวา เพื่อโยงคู่ความหมาย");
+
+            // หากเลือกครบสองฝั่งพร้อมกันแล้ว ให้ทำการสร้างการเชื่อมต่อทันที
+            checkAndCreateConnection();
+        }
+
+        // จัดการคลิกฝั่งบทกลอน
+        function selectPoem(id) {
+            playSound('select');
+
+            if (selectedPoemId === id) {
+                selectedPoemId = null;
+                document.getElementById(`p-${id}`)?.classList.remove("card-glow-selected");
+                showNotification("ยกเลิกการเลือกบทกลอนนี้แล้ว");
+                return;
+            }
+
+            // ลบการเชื่อมต่อเก่าหากกลอนนี้เคยจับคู่กับฝั่งซ้ายไปแล้ว
+            for (let gestureKey in connections) {
+                if (connections[gestureKey] === id) {
+                    delete connections[gestureKey];
+                    drawLines();
+                    updateVisualStates();
+                    break;
+                }
+            }
+
+            if (selectedPoemId) {
+                document.getElementById(`p-${selectedPoemId}`)?.classList.remove("card-glow-selected");
+            }
+
+            selectedPoemId = id;
+            document.getElementById(`p-${id}`)?.classList.add("card-glow-selected");
+
+            showNotification("จับคู่โดยจับป้ายภาษาท่าซ้ายมือต่อด้วยเพื่อลากสายใยเชื่อมโยง!");
+
+            // หากเลือกครบสองฝั่งพร้อมกันแล้ว ให้ทำการสร้างการเชื่อมต่อทันที
+            checkAndCreateConnection();
+        }
+
+        // เช็คการจับคู่และบันทึก
+        function checkAndCreateConnection() {
+            if (selectedGestureId && selectedPoemId) {
+                playSound('connect');
+                connections[selectedGestureId] = selectedPoemId;
+
+                // ลบสถานะ 'กำลังเลือก' ออก
+                document.getElementById(`g-${selectedGestureId}`)?.classList.remove("card-glow-selected");
+                document.getElementById(`p-${selectedPoemId}`)?.classList.remove("card-glow-selected");
+
+                selectedGestureId = null;
+                selectedPoemId = null;
+
+                showNotification("บันทึกการโยงเรียบร้อย! สามารถเลือกจับคู่คู่อื่น ๆ ต่อได้");
+                updateVisualStates();
+                drawLines();
+            }
+        }
+
+        // อัปเดตสเตตัสเอฟเฟกต์สีการจับคู่บนบัตรต่าง ๆ
+        function updateVisualStates() {
+            // คืนค่ามาตรฐานทุกแผ่นป้าย
+            gameData.forEach(item => {
+                const gCard = document.getElementById(`g-${item.id}`);
+                const pCard = document.getElementById(`p-${item.id}`);
+                const gDot = document.getElementById(`dot-inner-g-${item.id}`);
+                const pDot = document.getElementById(`dot-inner-p-${item.id}`);
+
+                if (gCard) gCard.className = gCard.className.replace(/card-glow-matched/g, "").trim();
+                if (pCard) pCard.className = pCard.className.replace(/card-glow-matched/g, "").trim();
+                
+                if (gDot) gDot.style.transform = "scale(0)";
+                if (pDot) pDot.style.transform = "scale(0)";
+            });
+
+            // เพิ่มสเตจเรืองแสงทองสำหรับที่คู่กันเรียบร้อย
+            for (let gId in connections) {
+                const pId = connections[gId];
+                
+                const gCard = document.getElementById(`g-${gId}`);
+                const pCard = document.getElementById(`p-${pId}`);
+                const gDot = document.getElementById(`dot-inner-g-${gId}`);
+                const pDot = document.getElementById(`dot-inner-p-${pId}`);
+
+                if (gCard) gCard.classList.add("card-glow-matched");
+                if (pCard) pCard.classList.add("card-glow-matched");
+
+                if (gDot) gDot.style.transform = "scale(1)";
+                if (pDot) pDot.style.transform = "scale(1)";
+            }
+        }
+
+        // จัดการยืดหดขนาดและตำแหน่ง Canvas ของสายใยเชื่อมโยง
+        function resizeCanvas() {
+            const bodyRect = document.body.getBoundingClientRect();
+            canvas.width = bodyRect.width;
+            canvas.height = bodyRect.height;
+            drawLines();
+        }
+
+        // ฟังก์ชันช่วยหาพิกัดศูนย์กลางของจุดเชื่อมต่อ (Dots) บนหน้าจอ
+        function getDotCoordinates(elementId) {
+            const dot = document.getElementById(elementId);
+            if (!dot) return null;
+            
+            const rect = dot.getBoundingClientRect();
+            const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            return {
+                x: rect.left + rect.width / 2 + scrollLeft,
+                y: rect.top + rect.height / 2 + scrollTop
+            };
+        }
+
+        // ฟังก์ชันวาดเส้นเชื่อมโยงคู่
+        function drawLines() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // ถ้าเป็นขนาดหน้าจอมือถือเล็กมาก จะไม่แสดงเส้นเพื่อหลีกเลี่ยงการกวนสายตา แต่จะเน้นที่ขอบสีการคู่กัน
+            if (window.innerWidth < 640) {
+                return; 
+            }
+
+            ctx.lineWidth = 3;
+            
+            for (let gId in connections) {
+                const pId = connections[gId];
+                const startPoint = getDotCoordinates(`dot-g-${gId}`);
+                const endPoint = getDotCoordinates(`dot-p-${pId}`);
+
+                if (startPoint && endPoint) {
+                    // กำหนดเอฟเฟกต์สีเรืองของเส้น (Gradient ทองประกาย)
+                    const grad = ctx.createLinearGradient(startPoint.x, startPoint.y, endPoint.x, endPoint.y);
+                    grad.addColorStop(0, '#f59e0b'); // Amber
+                    grad.addColorStop(0.5, '#fbbf24'); // Yellow glow
+                    grad.addColorStop(1, '#f59e0b');
+
+                    ctx.shadowBlur = 6;
+                    ctx.shadowColor = "rgba(245, 158, 11, 0.4)";
+                    
+                    ctx.beginPath();
+                    ctx.strokeStyle = grad;
+                    
+                    // ออกแบบเส้นเบซิเยร์อิงระดับ (Curve) สวยงามแบบอ่อนช้อยศิลป์
+                    const cp1x = startPoint.x + (endPoint.x - startPoint.x) / 3;
+                    const cp2x = startPoint.x + 2 * (endPoint.x - startPoint.x) / 3;
+                    ctx.moveTo(startPoint.x, startPoint.y);
+                    ctx.bezierCurveTo(cp1x, startPoint.y, cp2x, endPoint.y, endPoint.x, endPoint.y);
+                    
+                    ctx.stroke();
+                }
+            }
+        }
+
+        // แสดงสเตตัสการเล่นแถบเล็กข้างบน
+        function showNotification(text) {
+            statusAlert.innerText = text;
+            statusAlert.classList.remove("hidden");
+            statusAlert.classList.add("opacity-100");
+        }
+
+        // ตรวจคำตอบประเมินผลเชิงลึก
+        function checkAnswers() {
+            let matchedCount = Object.keys(connections).length;
+
+            if (matchedCount < gameData.length) {
+                playSound('error');
+                showNotification(`⚠️ ยังโยงคำตอบไม่ครบถ้วน! โยงแล้ว ${matchedCount} จากทั้งหมด ${gameData.length} ท่ากรุณาจับคู่ให้ครบถ้วนก่อนการวิเคราะห์`);
+                return;
+            }
+
+            let correctCount = 0;
+            let analysisHtml = "";
+
+            gameData.forEach(item => {
+                const userMatchPoemId = connections[item.id];
+                const isCorrect = (userMatchPoemId === item.id);
+                
+                if (isCorrect) correctCount++;
+
+                const statusColorClass = isCorrect ? "text-emerald-400 border-emerald-500/20 bg-emerald-950/20" : "text-rose-400 border-rose-500/20 bg-rose-950/20";
+                const statusSymbol = isCorrect ? "🟢 ถูกต้อง" : "🔴 ผิดพลาด";
+
+                analysisHtml += `
+                    <div class="p-4 rounded-xl border ${statusColorClass} space-y-2">
+                        <div class="flex justify-between items-center font-bold">
+                            <span class="header-font text-lg text-amber-300">🎭 ${item.gestureName} (${item.emotion})</span>
+                            <span class="text-sm px-2 py-0.5 rounded-md bg-slate-950">${statusSymbol}</span>
+                        </div>
+                        <p class="text-xs text-slate-400 font-medium">คำประพันธ์วรรณคดี:</p>
+                        <blockquote class="pl-4 border-l-2 border-amber-500/40 italic text-slate-200 text-sm py-1">
+                            "${item.poem}"
+                        </blockquote>
+                        <div class="text-xs text-slate-300 mt-2 leading-relaxed bg-slate-950/40 p-2.5 rounded border border-slate-800">
+                            <strong>🎓 ผลลัพธ์วิเคราะห์เชิงบูรณาการ:</strong> ${item.analysis}
+                        </div>
+                    </div>
+                `;
+            });
+
+            // ตกแต่งผลลัพธ์โมดอล
+            finalScoreDisplay.innerText = `${correctCount} / ${gameData.length}`;
+            analysisContainer.innerHTML = analysisHtml;
+
+            // ปลดล็อกเฟสที่ 2 เมื่อทำผ่านเกณฑ์ (ถูกอย่างน้อย 3 ใน 5)
+            const goPhase2Wrap = document.getElementById("btnGoPhase2Wrap");
+            if (correctCount >= 3) {
+                phase2Unlocked = true;
+                renderBreadcrumb();
+                goPhase2Wrap.classList.remove("hidden");
+            } else {
+                goPhase2Wrap.classList.add("hidden");
+            }
+
+            if (correctCount === gameData.length) {
+                playSound('success');
+                resultIcon.innerHTML = `
+                    <svg class="w-12 h-12 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                    </svg>
+                `;
+                resultTitle.innerText = "ยอดเยี่ยม! อัจฉริยะนาฏวรรณศิลป์";
+                resultSubtitle.innerText = "ท่านสามารถแยกแยะลีลาท่ารำและการพรรณนาอารมณ์ในบทกลอนไทยได้อย่างแจ่มแจ้ง";
+            } else if (correctCount >= 3) {
+                playSound('success');
+                resultIcon.innerHTML = `
+                    <svg class="w-12 h-12 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                `;
+                resultTitle.innerText = "ผ่านเกณฑ์! มีแววความก้าวหน้า";
+                resultSubtitle.innerText = "วิเคราะห์บทกวีสอดรับกับท่ารำได้ในเกณฑ์น่าชื่นชม ลองทบทวนจุดที่ผิดพลาดและลองใหม่อีกครั้ง";
+            } else {
+                playSound('error');
+                resultIcon.innerHTML = `
+                    <svg class="w-12 h-12 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                `;
+                resultTitle.innerText = "สู้ต่อไป! ประตูปัญญาเพิ่งเริ่มต้น";
+                resultSubtitle.innerText = "ภาษาศิลป์เป็นวิชาที่ต้องเรียนรู้เชิงลึก ลองอ่านคำเฉลยเชิงวิเคราะห์ของเราแล้วมาประลองใหม่!";
+            }
+
+            scoreBadge.innerText = `${correctCount} / ${gameData.length}`;
+            resultModal.classList.remove("hidden");
+        }
+
+        // ตัวช่วยสุ่มคำใบ้เชิงวิเคราะห์
+        function triggerHint() {
+            playSound('select');
+            
+            // หาคำตอบที่ผู้เล่นยังคิดไม่ออก หรือถ้าไม่ได้เลือกแผ่นป้ายอะไรเลยจะสุ่มแผ่นป้ายขึ้นมาแสดงคำใบ้
+            let unresolvedItemId = selectedGestureId || selectedPoemId;
+            
+            if (!unresolvedItemId) {
+                // ถ้าไม่มีการเลือก ให้ค้นหาด่านที่ยังเชื่อมโยงผิดหรือยังไม่เชื่อมโยงมาให้ดูเป็นใบ้ตัวอย่าง
+                const unmatched = gameData.find(item => !connections[item.id] || connections[item.id] !== item.id);
+                if (unmatched) {
+                    unresolvedItemId = unmatched.id;
+                } else {
+                    unresolvedItemId = gameData[0].id;
+                }
+            }
+
+            const activeData = gameData.find(item => item.id === unresolvedItemId);
+            if (activeData) {
+                hintContent.innerHTML = `
+                    <div class="text-sm">
+                        <h4 class="font-bold text-amber-300 border-b border-slate-800 pb-1.5 mb-2 header-font">💡 วิเคราะห์: "${activeData.gestureName}"</h4>
+                        <p class="text-slate-300 leading-relaxed mb-3">${activeData.hint}</p>
+                        <p class="text-xs text-indigo-300 font-medium bg-indigo-950/40 p-2 rounded border border-indigo-500/20">คำสำคัญในวรรณศิลป์: สอดคล้องกับคีย์เวิร์ดที่บ่งบอกถึง ${activeData.emotion}</p>
+                    </div>
+                `;
+            }
+
+            hintModal.classList.remove("hidden");
+        }
+
+        // จัดการเหตุการณ์ต่าง ๆ และปุ่มต่าง ๆ
+        window.addEventListener("resize", resizeCanvas);
+        window.addEventListener("scroll", drawLines);
+
+        // จัดการคลิกปิดโมดอล
+        btnRules.addEventListener("click", () => rulesModal.classList.remove("hidden"));
+        closeRulesBtn.addEventListener("click", () => rulesModal.classList.add("hidden"));
+        
+        btnCloseResult.addEventListener("click", () => resultModal.classList.add("hidden"));
+        btnRetryModal.addEventListener("click", () => {
+            resultModal.classList.add("hidden");
+            initGame();
+        });
+        document.getElementById("btnGoPhase2").addEventListener("click", () => {
+            resultModal.classList.add("hidden");
+            goToPhase(2);
+        });
+
+        closeHintBtn.addEventListener("click", () => hintModal.classList.add("hidden"));
+
+        // ปุ่มกระทำเกมเพลย์
+        btnCheck.addEventListener("click", checkAnswers);
+        btnHint.addEventListener("click", triggerHint);
+        btnReset.addEventListener("click", () => {
+            playSound('select');
+            initGame();
+            showNotification("รีเซ็ตกระดานเรียบร้อยแล้ว ลองเชื่อมโยงใหม่อีกครั้ง!");
+        });
+
+        // โหลดเกมครั้งแรก
+        window.onload = function() {
+            initGame();
+            // เปิดหน้าแนะนำวิธีเล่นเป็นป็อปอัปทักทายครั้งแรกเพื่อให้นักเรียนทำความเข้าใจกติกาก่อนการเรียนรู้
+            setTimeout(() => {
+                rulesModal.classList.remove("hidden");
+            }, 600);
+        };
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
-    
-    <script type="text/javascript">
+
+    <script>
         // ลิงก์โมเดลของคุณครู
-        const URL = "https://teachablemachine.withgoogle.com/models/1jrJKozUn/";
+        const TM_MODEL_URL = "https://teachablemachine.withgoogle.com/models/1jrJKozUn/";
         
         // ลำดับท่าทางที่ต้องการให้ทำ
         const targetPoses = [
@@ -159,7 +1036,7 @@
         ];
         
         let currentPoseIndex = 0; 
-        let model, webcam, ctx, maxPredictions;
+        let model, webcam, poseCtx, maxPredictions;
         let passTimer = 0; 
         const requiredFrames = 35; // ระยะเวลาค้างท่า (ประมาณ 1.5 - 2 วินาที)
 
@@ -172,8 +1049,8 @@
             statusDiv.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลดระบบ AI...';
             statusDiv.className = "text-center font-bold text-lg p-4 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 transition-colors duration-300";
             
-            const modelURL = URL + "model.json";
-            const metadataURL = URL + "metadata.json";
+            const modelURL = TM_MODEL_URL + "model.json";
+            const metadataURL = TM_MODEL_URL + "metadata.json";
 
             try {
                 model = await tmPose.load(modelURL, metadataURL);
@@ -187,13 +1064,13 @@
                 window.requestAnimationFrame(loop);
 
                 const canvas = document.getElementById("canvas");
-                ctx = canvas.getContext("2d");
+                poseCtx = canvas.getContext("2d");
                 
                 document.getElementById('progressContainer').classList.remove('hidden');
                 updateMissionUI(); 
                 
             } catch (e) {
-                alert("เกิดข้อผิดพลาดในการโหลดโมเดล โปรดตรวจสอบลิงก์ URL หรืออินเทอร์เน็ต");
+                alert("เกิดข้อผิดพลาดในการโหลดโมเดล โปรดตรวจสอบลิงก์ TM_MODEL_URL หรืออินเทอร์เน็ต");
                 statusDiv.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> เกิดข้อผิดพลาดในการโหลดโมเดล';
                 statusDiv.className = "text-center font-bold text-lg p-4 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 transition-colors duration-300";
             }
@@ -249,9 +1126,10 @@
                     if (currentPoseIndex < targetPoses.length) {
                         updateMissionUI(); 
                     } else {
-                        statusDiv.innerHTML = '<i class="fa-solid fa-party-horn"></i> 🎉 สำเร็จ! คุณปลดล็อกพลังร่ายรำครบทุกท่าแล้ว (ผ่านด่าน)';
+                        statusDiv.innerHTML = '<i class="fa-solid fa-party-horn"></i> 🎉 สำเร็จ! คุณปลดล็อกพลังร่ายรำครบทุกท่าแล้ว';
                         statusDiv.className = "text-center font-bold text-lg p-4 rounded-xl bg-emerald-600 text-white shadow-lg transition-all duration-300";
                         progressFill.style.width = "100%";
+                        completeStage2();
                     }
                 }
             } else {
@@ -282,13 +1160,21 @@
 
         function drawPose(pose) {
             if (webcam.canvas) {
-                ctx.drawImage(webcam.canvas, 0, 0);
+                poseCtx.drawImage(webcam.canvas, 0, 0);
                 if (pose) {
                     const minPartConfidence = 0.5;
-                    tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
-                    tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
+                    tmPose.drawKeypoints(pose.keypoints, minPartConfidence, poseCtx);
+                    tmPose.drawSkeleton(pose.keypoints, minPartConfidence, poseCtx);
                 }
             }
+        }
+		
+		function completeStage2() {
+            localStorage.setItem('stage3_cleared', 'true');
+
+            // แสดงแบนเนอร์แสดงความยินดีที่ผ่านครบทั้ง 2 เฟส
+            const banner = document.getElementById('phase2CompleteBanner');
+            if (banner) banner.classList.remove('hidden');
         }
     </script>
 </body>

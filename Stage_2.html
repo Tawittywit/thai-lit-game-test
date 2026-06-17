@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>มหาศึกเสียงปี่กู้พิภพ - เกมการเรียนรู้วิทยาศาสตร์เรื่องเสียง</title>
+    <title>ด่านที่ 2: ปี่แก้วสะท้านสมุทร</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Kanit -->
@@ -67,18 +67,22 @@
 
     <!-- Header Navigation Bar -->
     <header class="border-b border-indigo-900/50 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50 px-4 py-3">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <div class="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-3">
             <div class="flex items-center gap-3">
                 <div class="bg-gradient-to-tr from-amber-400 to-yellow-600 p-2 rounded-xl text-slate-950 font-black shadow-lg">
                     <i class="fa-solid fa-music text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg md:text-xl tracking-wide text-amber-400">มหาศึกเสียงปี่กู้พิภพ</h1>
-                    <p class="text-xs text-slate-400 hidden sm:block">วิทยาศาสตร์เรื่องเสียง: ระดับชั้นประถมศึกษา</p>
+                    <h1 class="font-bold text-lg md:text-xl tracking-wide text-amber-400">วรรณคดีไทยเกมวิทยาทัศน์</h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">ด่านที่ 2: ปี่แก้วสะท้านสมุทร</p>
                 </div>
             </div>
             <!-- Phase Indicators -->
-            <div class="flex items-center gap-2 md:gap-4 text-xs md:text-sm">
+            <div class="flex flex-wrap items-center justify-end gap-2 md:gap-4 text-xs md:text-sm">
+                <a href="Index.html" class="px-3 py-1.5 rounded-full bg-slate-800 hover:bg-slate-700 border border-amber-500/30 text-amber-300 font-semibold transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-house"></i>
+                    <span class="hidden sm:inline">กลับหน้าหลัก</span>
+                </a>
                 <div id="step1-badge" class="px-3 py-1.5 rounded-full font-semibold transition-all duration-300 bg-amber-500/20 text-amber-300 border border-amber-500/30">
                     <span class="hidden sm:inline">เฟส 1: </span>สำรวจวัตถุดิบ
                 </div>
@@ -606,7 +610,7 @@
     <!-- Footer Area -->
     <footer class="mt-auto border-t border-indigo-950 bg-slate-950/40 py-6 text-center text-xs text-slate-500">
         <div class="max-w-6xl mx-auto px-4 space-y-2">
-            <p>© 2026 มหาศึกเสียงปี่กู้พิภพ - โครงการนวัตกรรมการเรียนรู้วิทยาศาสตร์ฟิสิกส์ มวล และความถี่เสียง</p>
+        <p>© 2026 ปี่แก้วสะท้านสมุทร - โครงการนวัตกรรมการเรียนรู้วิทยาศาสตร์ฟิสิกส์ มวล และความถี่เสียง</p>
             <p>ออกแบบมาเป็นพิเศษสำหรับสื่อการเรียนรู้ระดับประถมศึกษาตอนปลาย</p>
         </div>
     </footer>
@@ -671,11 +675,14 @@
             }
         }
 
+        let modalAfterCloseAction = null;
+
         // Custom Modal Show
-        function showModal(title, body, icon = "🎉", success = true) {
+        function showModal(title, body, icon = "🎉", success = true, afterClose = null) {
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-body').innerText = body;
             document.getElementById('modal-icon').innerText = icon;
+            modalAfterCloseAction = afterClose;
             
             const iconBox = document.getElementById('modal-icon');
             if (success) {
@@ -689,6 +696,11 @@
 
         function closeModal() {
             document.getElementById('custom-modal').classList.add('hidden');
+            if (typeof modalAfterCloseAction === 'function') {
+                const action = modalAfterCloseAction;
+                modalAfterCloseAction = null;
+                action();
+            }
         }
 
         // ================= PHASE 1 LOGIC =================
@@ -1043,7 +1055,9 @@
             showModal(
                 "มหาชัยชนะสุดสะเทือนโลก! 🌊👑",
                 `ยินดีด้วย! คุณประดิษฐ์และใช้ปี่วิเศษความถี่สูงสุดถึง ${gameState.combatPower} Hz คลื่นเสียงแหลมสูงสั่นสะเทือนประสาทนางยักษ์ผีเสื้อสมุทรจนอกแตกตายนอนแพ้ภัยบนผืนคลื่น เกาะแก้วพิสดารกลับมาสุขสงบอีกครั้ง!`,
-                "🏆"
+                "🏆",
+                true,
+                onStage2Win
             );
         }
 
@@ -1100,6 +1114,14 @@
             updateBlueprint();
             changeScreen('screen-phase1');
         }
+		
+		function onStage2Win() {
+			// บันทึกสถานะว่าด่านที่ 2 ผ่านเรียบร้อยแล้ว
+			localStorage.setItem('stage2_cleared', 'true');
+
+			// ย้ายหน้ากลับมายังหน้าหลักระบบ
+			window.location.href = "Index.html";
+		}
     </script>
 </body>
 </html>
