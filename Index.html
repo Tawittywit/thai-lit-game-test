@@ -90,7 +90,7 @@
             <div class="text-center lg:text-left w-full flex justify-between items-center">
                 <div>
                     <h2 class="text-2xl font-bold text-emerald-400"><i class="fa-solid fa-compass mr-1"></i> ฝ่าเขาวงกตถ้ำพระอภัยมณี</h2>
-                    <p class="text-xs text-slate-400">กดปุ่มลูกศรเพื่อเดินหาด่าน (ต้องเล่นเรียงตามลำดับ 1 ➡️ 2 ➡️ 3)</p>
+                    <p class="text-xs text-slate-400">ใช้ปุ่มลูกศรบนหน้าจอหรือแป้นพิมพ์เพื่อเดินหาด่าน (ต้องเล่นเรียงตามลำดับ 1 ➡️ 2 ➡️ 3)</p>
                 </div>
                 <button onclick="resetAllProgress()" class="text-2xs bg-red-950/40 text-red-400 border border-red-900/60 hover:bg-red-900 hover:text-white px-2 py-1 rounded transition">
                     <i class="fa-solid fa-trash-can mr-1"></i> รีเซ็ตการเล่นใหม่
@@ -99,18 +99,18 @@
 
             <div class="relative rounded-2xl overflow-hidden border-4 border-slate-800 bg-slate-950">
                 <canvas id="map-canvas" width="600" height="600" class="w-full max-w-[600px] aspect-square block"></canvas>
-                
-                <div class="absolute bottom-4 right-4 grid grid-cols-3 gap-1 w-28 h-28 opacity-75 hover:opacity-100 transition sm:hidden">
-                    <div></div>
-                    <button onclick="movePlayer('up')" class="bg-slate-800 text-emerald-400 active:bg-emerald-500 active:text-slate-950 rounded-lg flex items-center justify-center border border-slate-700"><i class="fa-solid fa-caret-up text-xl"></i></button>
-                    <div></div>
-                    <button onclick="movePlayer('left')" class="bg-slate-800 text-emerald-400 active:bg-emerald-500 active:text-slate-950 rounded-lg flex items-center justify-center border border-slate-700"><i class="fa-solid fa-caret-left text-xl"></i></button>
-                    <div class="bg-slate-900/80 rounded-lg border border-slate-800"></div>
-                    <button onclick="movePlayer('right')" class="bg-slate-800 text-emerald-400 active:bg-emerald-500 active:text-slate-950 rounded-lg flex items-center justify-center border border-slate-700"><i class="fa-solid fa-caret-right text-xl"></i></button>
-                    <div></div>
-                    <button onclick="movePlayer('down')" class="bg-slate-800 text-emerald-400 active:bg-emerald-500 active:text-slate-950 rounded-lg flex items-center justify-center border border-slate-700"><i class="fa-solid fa-caret-down text-xl"></i></button>
-                    <div></div>
-                </div>
+            </div>
+
+            <div id="maze-controls" aria-label="ปุ่มควบคุมตัวละคร" class="grid grid-cols-3 gap-1.5 w-32 h-32 touch-manipulation select-none">
+                <div></div>
+                <button type="button" aria-label="เดินขึ้น" title="เดินขึ้น" onclick="movePlayer('up')" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 active:bg-emerald-500 active:text-slate-950 rounded-lg flex items-center justify-center border border-slate-700 shadow-md"><i class="fa-solid fa-caret-up text-2xl"></i></button>
+                <div></div>
+                <button type="button" aria-label="เดินซ้าย" title="เดินซ้าย" onclick="movePlayer('left')" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 active:bg-emerald-500 active:text-slate-950 rounded-lg flex items-center justify-center border border-slate-700 shadow-md"><i class="fa-solid fa-caret-left text-2xl"></i></button>
+                <div class="bg-slate-900/80 rounded-lg border border-slate-800"></div>
+                <button type="button" aria-label="เดินขวา" title="เดินขวา" onclick="movePlayer('right')" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 active:bg-emerald-500 active:text-slate-950 rounded-lg flex items-center justify-center border border-slate-700 shadow-md"><i class="fa-solid fa-caret-right text-2xl"></i></button>
+                <div></div>
+                <button type="button" aria-label="เดินลง" title="เดินลง" onclick="movePlayer('down')" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 active:bg-emerald-500 active:text-slate-950 rounded-lg flex items-center justify-center border border-slate-700 shadow-md"><i class="fa-solid fa-caret-down text-2xl"></i></button>
+                <div></div>
             </div>
         </div>
 
@@ -182,6 +182,8 @@
             stage2_cleared: false,
             stage3_cleared: false
         };
+        let portalPromptActive = false;
+        let ignoredClearedPortalId = null;
 
         // Maze Definition (1=Wall, 0=Path) - 20x20 grid
         const baseMazeGrid = [
@@ -433,6 +435,7 @@
                 document.getElementById('status-card-1').className = "p-3 bg-emerald-950/50 border border-emerald-500 rounded-xl flex items-center justify-between";
                 document.getElementById('desc-stage-1').innerHTML = "<span class='text-emerald-400 font-bold'><i class='fa-solid fa-circle-check'></i> ผ่านภารกิจแล้ว</span>";
                 document.getElementById('icon-stage-1').textContent = "✅";
+                document.getElementById('btn-stage-1').innerHTML = '<i class="fa-solid fa-rotate-right mr-1"></i> เล่นซ้ำ';
             }
 
             const card2 = document.getElementById('status-card-2');
@@ -451,6 +454,7 @@
                 card2.className = "p-3 bg-emerald-950/50 border border-emerald-500 rounded-xl flex items-center justify-between";
                 document.getElementById('desc-stage-2').innerHTML = "<span class='text-emerald-400 font-bold'><i class='fa-solid fa-circle-check'></i> ผ่านภารกิจแล้ว</span>";
                 document.getElementById('icon-stage-2').textContent = "✅";
+                btn2.innerHTML = '<i class="fa-solid fa-rotate-right mr-1"></i> เล่นซ้ำ';
             }
 
             const card3 = document.getElementById('status-card-3');
@@ -469,6 +473,7 @@
                 card3.className = "p-3 bg-emerald-950/50 border border-emerald-500 rounded-xl flex items-center justify-between";
                 document.getElementById('desc-stage-3').innerHTML = "<span class='text-emerald-400 font-bold'><i class='fa-solid fa-circle-check'></i> ผ่านภารกิจแล้ว</span>";
                 document.getElementById('icon-stage-3').textContent = "✅";
+                btn3.innerHTML = '<i class="fa-solid fa-rotate-right mr-1"></i> เล่นซ้ำ';
             }
 
             document.getElementById('cleared-count').textContent = clearedCounter;
@@ -716,7 +721,7 @@
         }
 
         function movePlayer(direction) {
-            if (!hasEnteredPlayerName) return;
+            if (!hasEnteredPlayerName || portalPromptActive) return;
 
             let nextX = player.x;
             let nextY = player.y;
@@ -755,14 +760,47 @@
         }
 
         function evaluatePortalIntersection() {
+            if (portalPromptActive) return;
+
             portals.forEach(portal => {
                 const pTargetX = portal.gridX * TILE_SIZE + TILE_SIZE / 2;
                 const pTargetY = portal.gridY * TILE_SIZE + TILE_SIZE / 2;
                 const gap = Math.hypot(player.x - pTargetX, player.y - pTargetY);
+                const intersectionDistance = TILE_SIZE / 2 + 8;
 
-                if (gap < TILE_SIZE / 2 + 8) {
+                if (ignoredClearedPortalId === portal.id && gap > intersectionDistance + 8) {
+                    ignoredClearedPortalId = null;
+                }
+
+                if (gap < intersectionDistance) {
                     if (portal.unlocked) {
-                        launchStage(portal.id, portal.file);
+                        const stageCleared = localStorage.getItem(`stage${portal.id}_cleared`) === 'true';
+                        if (stageCleared) {
+                            if (ignoredClearedPortalId === portal.id) return;
+
+                            portalPromptActive = true;
+                            Swal.fire({
+                                icon: 'question',
+                                title: 'ต้องการเล่นด่านนี้ซ้ำหรือไม่?',
+                                text: `คุณผ่านด่าน “${portal.name}” แล้ว สามารถเลือกเล่นซ้ำตอนนี้ หรือเดินทางต่อและกดปุ่มเล่นซ้ำจากรายการด้านข้างภายหลังได้`,
+                                showCancelButton: true,
+                                confirmButtonText: 'เล่นซ้ำ',
+                                cancelButtonText: 'เดินทางต่อ',
+                                confirmButtonColor: portal.color,
+                                cancelButtonColor: '#64748b',
+                                background: '#0f172a',
+                                color: '#f8fafc'
+                            }).then((result) => {
+                                portalPromptActive = false;
+                                if (result.isConfirmed) {
+                                    launchStage(portal.id, portal.file);
+                                } else {
+                                    ignoredClearedPortalId = portal.id;
+                                }
+                            });
+                        } else {
+                            launchStage(portal.id, portal.file);
+                        }
                     } else {
                         Swal.fire({
                             icon: 'warning',
