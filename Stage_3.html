@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ด่านที่ 3: นาฏเงาแก้วพิสดาร</title>
+    <title>ด่านที่ 3: มหาเวทสลับลักษณ์ร่ายรำ ปราบอสุรา</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -75,7 +75,7 @@
 </head>
 <body class="min-h-screen text-slate-100 flex flex-col overflow-x-hidden relative">
 
-    <!-- CANVAS สำหรับวาดเส้นโยงใยของเฟสที่ 1 -->
+    <!-- CANVAS สำหรับวาดเส้นโยงใยของกิจกรรมที่ 1 -->
     <canvas id="connectionCanvas" class="absolute top-0 left-0 w-full h-full pointer-events-none z-10"></canvas>
 
     <header class="w-full bg-slate-900/80 border-b border-amber-500/20 py-4 px-6 backdrop-blur-md sticky top-0 z-30">
@@ -88,7 +88,7 @@
                 </div>
                 <div>
                     <h1 class="header-font text-2xl font-bold text-amber-400 tracking-wide">วรรณคดีไทยเกมวิทยาทัศน์</h1>
-                    <p class="text-xs text-slate-400">ด่านที่ 3: นาฏเงาแก้วพิสดาร • 2 เฟสการเรียนรู้</p>
+                    <p class="text-xs text-slate-400">ด่านที่ 3: มหาเวทสลับลักษณ์ร่ายรำ ปราบอสุรา • 2 กิจกรรมการเรียนรู้</p>
                 </div>
             </div>
             <div class="flex flex-wrap items-center justify-end gap-2 text-xs md:text-sm">
@@ -105,11 +105,11 @@
 
     <main class="flex-grow w-full relative z-20">
 
-        <!-- ============ เฟสที่ 1: จับคู่ภาษาท่ากับบทกลอน ============ -->
+        <!-- ============ กิจกรรมที่ 1: จับคู่ตรามนตรา สยบพายุทมิฬ ============ -->
         <div id="phase1View" class="max-w-6xl w-full mx-auto p-4 md:p-6 flex flex-col justify-center">
             <div class="flex flex-col md:flex-row justify-between items-center gap-3 mb-5 bg-slate-900/60 border border-amber-500/10 rounded-xl px-4 py-3">
             <div class="text-center md:text-left">
-                <h2 class="header-font text-lg font-bold text-amber-300">🎭 เฟสที่ 1: จับคู่ภาษาท่ากับบทกลอน</h2>
+                <h2 class="header-font text-lg font-bold text-amber-300">🎭 กิจกรรมที่ 1: จับคู่ตรามนตรา สยบพายุทมิฬ</h2>
                 <p class="text-xs text-slate-400">วิเคราะห์ลีลานาฏศิลป์ให้ตรงกับบทประพันธ์วรรณคดีไทย</p>
             </div>
             <div class="flex items-center gap-3">
@@ -228,7 +228,7 @@
             </div>
             <div id="btnGoPhase2Wrap" class="hidden mt-4">
                 <button id="btnGoPhase2" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2">
-                    ไปต่อเฟสที่ 2: กระจกเงาตีบทท่ารำ <i class="fa-solid fa-arrow-right"></i>
+                    ไปต่อกิจกรรมที่ 2: มหาราชกระจกเงาตีบท สยบอสุรา <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         </div>
@@ -252,12 +252,12 @@
     </div>
         </div>
 
-        <!-- ============ เฟสที่ 2: กระจกเงาตีบทท่ารำ ============ -->
+        <!-- ============ กิจกรรมที่ 2: มหาราชกระจกเงาตีบท สยบอสุรา ============ -->
         <div id="phase2View" class="hidden max-w-6xl w-full mx-auto p-4 md:p-6 flex flex-col items-center justify-center">
             <div class="w-full bg-indigo-950/40 border border-indigo-900/60 p-4 md:p-6 rounded-2xl flex flex-col md:flex-row gap-4 justify-between items-center mb-6 max-w-5xl">
             <div class="space-y-1 text-center md:text-left">
-                <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">เฟสที่ 2 • The Mirror of Expressions</span>
-                <h3 class="text-2xl font-bold">กระจกเงาตีบท</h3>
+                <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">กิจกรรมที่ 2 • The Mirror of Expressions</span>
+                <h3 class="text-2xl font-bold">มหาราชกระจกเงาตีบท สยบอสุรา</h3>
                 <p class="text-sm text-slate-300 mt-1">จงแสดงภาษาท่าทางให้ถูกต้องตามลำดับ ค้างไว้จนหลอดพลังเต็ม เพื่อปลดล็อกพลังร่ายรำ!</p>
             </div>
             <div class="bg-slate-900/80 px-4 py-2.5 rounded-xl border border-indigo-800/40 text-center flex-shrink-0">
@@ -319,10 +319,10 @@
                     </div>
 
                     <div id="phase2CompleteBanner" class="hidden text-center p-5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 space-y-3">
-                        <p class="text-emerald-300 font-bold text-lg"><i class="fa-solid fa-trophy"></i> ยอดเยี่ยม! คุณผ่านครบทั้ง 2 เฟสของด่านที่ 3 แล้ว</p>
+                        <p class="text-emerald-300 font-bold text-lg"><i class="fa-solid fa-trophy"></i> ยอดเยี่ยม! คุณผ่านครบทั้ง 2 กิจกรรมของด่านที่ 3 แล้ว</p>
                         <p class="text-sm text-slate-300">ระบบบันทึกสถานะผ่านด่านที่ 3 เรียบร้อยแล้ว กลับหน้าหลักเพื่อดูความคืบหน้า 3/3 ด่านได้เลย</p>
                         <div class="flex flex-wrap justify-center gap-3 pt-1">
-                            <button type="button" onclick="goToPhase(1)" class="bg-slate-800 hover:bg-slate-700 text-amber-300 font-semibold px-5 py-2.5 rounded-xl border border-amber-500/30 transition">← ย้อนกลับไปเฟสที่ 1</button>
+                            <button type="button" onclick="goToPhase(1)" class="bg-slate-800 hover:bg-slate-700 text-amber-300 font-semibold px-5 py-2.5 rounded-xl border border-amber-500/30 transition">← ย้อนกลับไปกิจกรรมที่ 1</button>
                             <button type="button" onclick="window.location.href='Index.html'" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold px-5 py-2.5 rounded-xl transition">กลับหน้าหลัก</button>
                         </div>
                     </div>
@@ -335,7 +335,7 @@
     </main>
 
     <footer class="w-full bg-slate-950/80 border-t border-slate-900 text-center py-4 text-xs text-slate-500 relative z-20">
-        © ๒๕๖๙ วรรณคดีไทยเกมวิทยาทัศน์ — ด่านที่ 3: นาฏเงาแก้วพิสดาร
+        © ๒๕๖๙ วรรณคดีไทยเกมวิทยาทัศน์ — ด่านที่ 3: มหาเวทสลับลักษณ์ร่ายรำ ปราบอสุรา
     </footer>
 
     <script>
@@ -394,7 +394,7 @@
     </script>
 
     <script>
-        // ----- ระบบสลับเฟสของบทเรียน -----
+        // ----- ระบบสลับกิจกรรมของบทเรียน -----
         let currentPhase = 1;
         let phase2Unlocked = false;
 
@@ -402,17 +402,17 @@
             const c1 = document.getElementById("crumbPhase1");
             const c2 = document.getElementById("crumbPhase2");
 
-            c1.innerHTML = "เฟส 1: จับคู่ภาษาท่า";
+            c1.innerHTML = "กิจกรรมที่ 1: จับคู่ตรามนตรา สยบพายุทมิฬ";
             c1.className = "px-3 py-1.5 rounded-full font-semibold transition-all duration-300 border " +
                 (currentPhase === 1
                     ? "bg-amber-500/20 text-amber-300 border-amber-500/30"
                     : "bg-slate-800 hover:bg-slate-700 text-slate-400 border-transparent");
 
             if (!phase2Unlocked) {
-                c2.innerHTML = '<i class="fa-solid fa-lock text-[10px] mr-1"></i>เฟส 2: กระจกเงาตีบทท่ารำ';
+                c2.innerHTML = '<i class="fa-solid fa-lock text-[10px] mr-1"></i>กิจกรรมที่ 2: มหาราชกระจกเงาตีบท สยบอสุรา';
                 c2.className = "px-3 py-1.5 rounded-full font-semibold transition-all duration-300 border border-transparent bg-slate-800/60 text-slate-600 cursor-not-allowed";
             } else {
-                c2.innerHTML = '<i class="fa-solid fa-unlock text-[10px] mr-1"></i>เฟส 2: กระจกเงาตีบทท่ารำ';
+                c2.innerHTML = '<i class="fa-solid fa-unlock text-[10px] mr-1"></i>กิจกรรมที่ 2: มหาราชกระจกเงาตีบท สยบอสุรา';
                 c2.className = "px-3 py-1.5 rounded-full font-semibold transition-all duration-300 border " +
                     (currentPhase === 2
                         ? "bg-amber-500/20 text-amber-300 border-amber-500/30"
@@ -422,7 +422,7 @@
 
         function goToPhase(n) {
             if (n === 2 && !phase2Unlocked) {
-                showNotification("กรุณาตอบให้ถูกอย่างน้อย 3 ใน 5 ในเฟสที่ 1 ก่อน เพื่อปลดล็อกเฟสที่ 2");
+                showNotification("กรุณาตอบให้ถูกอย่างน้อย 3 ใน 5 ในกิจกรรมที่ 1 ก่อน เพื่อปลดล็อกกิจกรรมที่ 2");
                 return;
             }
             currentPhase = n;
@@ -907,7 +907,7 @@
             finalScoreDisplay.innerText = `${correctCount} / ${gameData.length}`;
             analysisContainer.innerHTML = analysisHtml;
 
-            // ปลดล็อกเฟสที่ 2 เมื่อทำผ่านเกณฑ์ (ถูกอย่างน้อย 3 ใน 5)
+            // ปลดล็อกกิจกรรมที่ 2 เมื่อทำผ่านเกณฑ์ (ถูกอย่างน้อย 3 ใน 5)
             const goPhase2Wrap = document.getElementById("btnGoPhase2Wrap");
             if (correctCount >= 3) {
                 phase2Unlocked = true;
@@ -1182,7 +1182,7 @@
 		function completeStage2() {
             localStorage.setItem('stage3_cleared', 'true');
 
-            // แสดงแบนเนอร์แสดงความยินดีที่ผ่านครบทั้ง 2 เฟส
+            // แสดงแบนเนอร์แสดงความยินดีที่ผ่านครบทั้ง 2 กิจกรรม
             const banner = document.getElementById('phase2CompleteBanner');
             if (banner) banner.classList.remove('hidden');
         }
